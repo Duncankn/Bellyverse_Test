@@ -1,0 +1,138 @@
+* {
+	box-sizing:  border-box;
+}
+
+body, html {
+	height: 100%;
+	margin:  0;
+	font-family: Inter, sans-serif;
+}
+
+.screen--container {
+	width: 100vw;
+	height: 100vh;
+	color: rgb(183, 221, 221);
+}
+
+nav {
+	display: flex;
+	align-items: center;
+	height: 90;
+	padding: 30px 25px;
+}
+
+.nav--logo {
+	height: 50px;
+	margin-right: auto;
+	margin-left: 10px;
+}
+
+.nav--button {
+	height: 50px;
+	width: 180px;
+	font-size: 24px;
+	color: #19373f;
+	font-weight: 700;
+	border-color: #19373f;
+	border-radius: 12px;
+}
+
+.nav--logo-text {
+	color: #19373f;
+	font-weight: 700;
+}
+
+.main-content{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.hero {
+	display: flex;
+	flex-direction: column;
+	margin-right: auto;
+	max-width: 600px;
+}
+
+.hero--photo {
+	max-width: 400px;
+	align-self: center;
+	margin: 0 48px;
+}
+
+.hero--header{
+	margin: 0 48px 12px;
+}
+
+.hero--text{
+	margin: 10px 48px;
+	color: var(--secondary-text);
+}
+
+.mint--container{
+	display: flex;
+	flex-direction: column;
+	min-width: 360px;
+	width: 900px;
+	min-height: 400px;
+	justify-content: center;
+	align-items: center;
+	color: var(--secondary-text);
+	border-style: dashed;
+	border-radius: 20px;
+	border-color:#19373f;
+	margin: 12px 12px;
+}
+
+.minted-amount{
+	color:#19373f;
+}
+
+.round-button{
+	padding: 10px;
+	border-radius: 100%;
+	border: none;
+	background-color: var(--primary);
+	padding: 10px;
+	font-weight: bold;
+	font-size: 25px;
+	color: var(--primary-text);
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0px 4px 0px -2px rgba(250, 250, 250, 0.3);
+	-webkit-box-shadow: 0px 4px 0px -2px rgba(250, 250, 250, 0.3);
+	-moz-box-shadow: 0px 4px 0px -2px rgba(250, 250, 250, 0.3);
+}
+
+.quantity--container{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.quantity--text{
+	font-size: 25px;
+	color: var(--primary-text);
+	margin: 15px 15px;
+}
+
+.myCollection {
+	font-family: sans-serif;
+	text-align: center;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+}
+
+.myCollection--title {
+	color: var(--secondary-text);
+	margin: 25px 50px;
+}
