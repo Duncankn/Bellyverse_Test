@@ -4,14 +4,15 @@
   "NETWORK": {
     "NAME": "Polygon Mumbai",
     "SYMBOL": "MATIC",
-    "ID": 80001
+    "ID": 80001,
+    "RPC_URL": "https://rpc-mumbai.maticvigil.com/"
   },
   "NFT_NAME": "Belly Test NFT",
   "SYMBOL": "BLT",
   "MAX_SUPPLY": 10000,
   "WEI_COST": 10000000000000000,
   "DISPLAY_COST": 0.01,
-  "GAS_LIMIT": 3000000,
+  "GAS_LIMIT": 100000,
   "MARKETPLACE": "",
   "MARKETPLACE_LINK": "",
   "SHOW_BACKGROUND": true
