@@ -88,6 +88,26 @@ export const connect = () => {
               method: "wallet_switchEthereumChain",
               params: [{ chainId: Web3.utils.toHex(CONFIG.NETWORK.ID) }]
             });
+
+            const accounts = await ethereum.request({
+              method: "eth_requestAccounts"
+            });
+            const networkId = await ethereum.request({
+              method: "net_version"
+            });
+            if (networkId == CONFIG.NETWORK.ID) {
+              const SmartContractObj = new Web3EthContract(
+                abi,
+                CONFIG.CONTRACT_ADDRESS
+              );
+              dispatch(
+                connectSuccess({
+                  account: accounts[0],
+                  smartContract: SmartContractObj,
+                  web3: web3
+                })
+              );
+            }
           } catch (switchError) {
             // This error code indicates that the chain has not been added to MetaMask.
             if (switchError.code === 4902) {
@@ -112,6 +132,25 @@ export const connect = () => {
                     }
                   ]
                 });
+                const accounts = await ethereum.request({
+                  method: "eth_requestAccounts"
+                });
+                const networkId = await ethereum.request({
+                  method: "net_version"
+                });
+                if (networkId == CONFIG.NETWORK.ID) {
+                  const SmartContractObj = new Web3EthContract(
+                    abi,
+                    CONFIG.CONTRACT_ADDRESS
+                  );
+                  dispatch(
+                    connectSuccess({
+                      account: accounts[0],
+                      smartContract: SmartContractObj,
+                      web3: web3
+                    })
+                  );
+                }
               } catch (switchError) {
                 dispatch(connectFailed("Something went wrong."));
               }
