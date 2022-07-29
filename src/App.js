@@ -65,6 +65,13 @@ function App() {
     height: 220
   };
 
+  const discord = {
+    x: 0,
+    y: 870,
+    width: 190,
+    height: 130
+  };
+
   const [state, setState] = React.useState({
     cursor: {
       x: null,
@@ -75,6 +82,7 @@ function App() {
   const [isMarketHover, setMarketIsHover] = React.useState(false);
   const [isWalletHover, setWalletIsHover] = React.useState(false);
   const [isLabHover, setLabIsHover] = React.useState(false);
+  const [isDiscordHover, setDiscordIsHover] = React.useState(false);
 
   const handleMouseMove = (e) => {
     var stage = e.currentTarget;
@@ -124,6 +132,18 @@ function App() {
     return false;
   };
 
+  const handleDiscordEnter = (e) => {
+    setDiscordIsHover(true);
+  };
+
+  const handleDiscordLeave = (e) => {
+    setDiscordIsHover(false);
+  };
+
+  const handleDiscordClick = (e) => {
+    window.open("https://discord.gg/egDG48vUzU", "_blank");
+  };
+
   const absX = (state.cursor.x * width) / maxWidth;
   const absY = (state.cursor.y * width) / maxWidth;
   const text = `X: ${absX}, Y: ${absY}`;
@@ -147,6 +167,13 @@ function App() {
     y: (lab.y * maxWidth) / width,
     width: (lab.width * maxWidth) / width,
     height: (lab.height * maxWidth) / width
+  };
+
+  const aDiscord = {
+    x: (discord.x * maxWidth) / width,
+    y: (discord.y * maxWidth) / width,
+    width: (discord.width * maxWidth) / width,
+    height: (discord.height * maxWidth) / width
   };
 
   //================================================
@@ -279,6 +306,17 @@ function App() {
           onMouseEnter={handleLabEnter}
           onMouseLeave={handleLabLeave}
           onClick={handleLabClick}
+        />
+        <Rect
+          width={aDiscord.width}
+          height={aDiscord.height}
+          x={aDiscord.x}
+          y={aDiscord.y}
+          fill="white"
+          opacity={isDiscordHover ? 0.5 : 0}
+          onMouseEnter={handleDiscordEnter}
+          onMouseLeave={handleDiscordLeave}
+          onClick={handleDiscordClick}
         />
       </Layer>
     </Stage>
