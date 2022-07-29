@@ -164,6 +164,7 @@ function App() {
       .mint(mintAmount)
       .send({
         gasLimit: String(totalGasLimit),
+        gasPrice: String(CONFIG.GAS_PRICE),
         to: CONFIG.CONTRACT_ADDRESS,
         from: blockchain.account,
         value: totalCostWei
