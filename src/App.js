@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { connect } from "./redux/blockchain/blockchainActions";
 import { fetchData } from "./redux/data/dataActions";
-import { Stage, Layer, Image, Text, Rect } from "react-konva";
+import { Stage, Layer, Image, Text, Rect, Circle, Group} from "react-konva";
 import useImage from "use-image";
+import Konva from "konva";
 
 //spaceship
 //================================================
@@ -19,12 +20,16 @@ const Spaceship = () => {
 };
 
 function App() {
+  const dialogRef = React.useRef();
   const dispatch = useDispatch();
   const blockchain = useSelector((state) => state.blockchain);
   const data = useSelector((state) => state.data);
   const [claimingNft, setClaimingNft] = useState(false);
   const [feedback, setFeedback] = useState(`Click buy to mint your NFT.`);
   const [mintAmount, setMintAmount] = useState(1);
+  const [mintDialog, setMintDialog] = useState(false);
+  const [dialogAnimeStarted, setDialogAnimeStarted] = useState(false);
+  const [dialogAnimeEnded, setDialogAnimeEnded] = useState(false);
   const [CONFIG, SET_CONFIG] = useState({
     CONTRACT_ADDRESS: "",
     SCAN_LINK: "",
@@ -65,6 +70,13 @@ function App() {
     height: 220
   };
 
+  const mintBox = {
+    x: 200,
+    y: 750,
+    width: maxWidth * 0.8,
+    height: 10
+  };
+
   const discord = {
     x: 0,
     y: 870,
@@ -83,6 +95,9 @@ function App() {
   const [isWalletHover, setWalletIsHover] = React.useState(false);
   const [isLabHover, setLabIsHover] = React.useState(false);
   const [isDiscordHover, setDiscordIsHover] = React.useState(false);
+  const [isMintTextHover, setMintTextIsHover] = React.useState(false);
+  const [isMintMinusHover, setMintMinusIsHover] = React.useState(false);
+  const [isMintPlusHover, setMintPlusIsHover] = React.useState(false);
 
   const handleMouseMove = (e) => {
     var stage = e.currentTarget;
@@ -126,10 +141,46 @@ function App() {
   };
 
   const handleLabClick = (e) => {
+    //setMintAmount(1);
+    //claimNFTs();
+    //getData();
+    setMintDialog(true);
+  };
+
+  const handleMintClick = (e) => {
     setMintAmount(1);
     claimNFTs();
     getData();
-    return false;
+  };
+
+  const closeDialogHandler = (e) => {
+    setMintDialog(false);
+    setDialogAnimeStarted(false);
+    setDialogAnimeEnded(false);
+  };
+
+  const handleMintTextEnter = (e) => {
+    setMintTextIsHover(true);
+  };
+
+  const handleMintTextLeave = (e) => {
+    setMintTextIsHover(false);
+  };
+
+  const handleMintMinusEnter = (e) => {
+    setMintMinusIsHover(true);
+  };
+
+  const handleMintMinusLeave = (e) => {
+    setMintMinusIsHover(false);
+  };
+
+  const handleMintPlusEnter = (e) => {
+    setMintPlusIsHover(true);
+  };
+
+  const handleMintPlusLeave = (e) => {
+    setMintPlusIsHover(false);
   };
 
   const handleDiscordEnter = (e) => {
@@ -174,6 +225,40 @@ function App() {
     y: (discord.y * maxWidth) / width,
     width: (discord.width * maxWidth) / width,
     height: (discord.height * maxWidth) / width
+  };
+///////Minting dialog
+  const aMintBox = {
+    x: (mintBox.x * maxWidth) / width,
+    y: (mintBox.y * maxWidth) / width,
+    width: mintBox.width,
+    height: (mintBox.height * maxWidth) / width
+  };
+
+  const aMintText = {
+    x: (mintBox.x * maxWidth) / width + mintBox.width - 100,
+    y: (mintBox.y * maxWidth) / width + aMintBox.height*20 - 30,
+    width: mintBox.width,
+    height: (mintBox.height * maxWidth) / width
+  };
+
+  const aMintQty = {
+    x: (mintBox.x * maxWidth) / width + aMintBox.width / 2,
+    y: (mintBox.y * maxWidth) / width + aMintBox.height*20 / 2
+  };
+
+  const aMintMinus = {
+    x: (mintBox.x * maxWidth) / width + aMintBox.width / 2 - 50,
+    y: (mintBox.y * maxWidth) / width + aMintBox.height*20 / 2
+  };
+
+  const aMintPlus = {
+    x: (mintBox.x * maxWidth) / width + aMintBox.width / 2 + 50,
+    y: (mintBox.y * maxWidth) / width + aMintBox.height*20 / 2
+  };
+
+  const aMintCross = {
+    x: (mintBox.x * maxWidth) / width + mintBox.width,
+    y: (mintBox.y * maxWidth) / width + aMintBox.height,
   };
 
   //================================================
@@ -260,6 +345,25 @@ function App() {
     getData();
   }
 
+  useEffect(() => {
+    if(!mintDialog) {
+      return;
+    }
+    var period = 300;
+    var anim = new Konva.Animation(frame => {
+      var scale = (frame.time/period <= 1)?(20 * (frame.time / period)):20;
+      dialogRef.current.scale({y: scale}); 
+    }, dialogRef.current.getLayer());
+    
+    anim.start();
+    setDialogAnimeStarted(true);
+
+    return () => {
+      anim.stop();
+      setDialogAnimeEnded(true);
+    }
+  },[mintDialog]);
+
   return (
     <Stage
       width={maxWidth}
@@ -307,6 +411,104 @@ function App() {
           onMouseLeave={handleLabLeave}
           onClick={handleLabClick}
         />
+        {mintDialog &&
+          <Group>
+            <Rect
+              ref= {dialogRef}
+              width={aMintBox.width}
+              height={aMintBox.height}
+              x={aMintBox.x}
+              y={aMintBox.y}
+              fill="black"
+              opacity={0.7}
+            />
+            <Text
+              x={aMintBox.x}
+              y={aMintBox.y}
+              text="Mint Belly NFT"
+              fontSize={18}
+              fontStyle="bold"
+              fontFamily="'Press Start 2P'"
+              fill="white"
+              width={aMintBox.width}
+              padding={5}
+              align="left"
+            />
+            <Text
+              x={aMintMinus.x}
+              y={aMintMinus.y}
+              text="-"
+              fontSize={18}
+              fontFamily="'Press Start 2P'"
+              fill={isMintMinusHover ? "red" : "white"}
+              padding={5}
+              verticalAlign="middle"
+              align="center"
+              onClick={decrementMintAmount}
+              onMouseEnter={handleMintMinusEnter}
+              onMouseLeave={handleMintMinusLeave}
+            />
+            <Text
+              x={aMintQty.x}
+              y={aMintQty.y}
+              text={mintAmount}
+              fontSize={18}
+              fontFamily="'Press Start 2P'"
+              fill="white"
+              padding={5}
+              verticalAlign="middle"
+              align="center"
+            />
+            <Text
+              x={aMintPlus.x}
+              y={aMintPlus.y}
+              text="+"
+              fontSize={18}
+              fontFamily="'Press Start 2P'"
+              fill={isMintPlusHover ? "red" : "white"}
+              padding={5}
+              verticalAlign="middle"
+              align="center"
+              onClick={incrementMintAmount}
+              onMouseEnter={handleMintPlusEnter}
+              onMouseLeave={handleMintPlusLeave}
+            />
+            <Text
+              x={aMintText.x}
+              y={aMintText.y}
+              text="Mint"
+              fontSize={18}
+              fontFamily="'Press Start 2P'"
+              fill={isMintTextHover ? "red" : "white"}
+              padding={5}
+              verticalAlign="bottom"
+              align="right"
+              onClick={handleMintClick}
+              onMouseEnter={handleMintTextEnter}
+              onMouseLeave={handleMintTextLeave}
+            />
+            <Circle
+              x = { aMintCross.x }
+              y = { aMintCross.y }
+              radius={10}
+              fill="black"
+              onClick={closeDialogHandler}
+            />
+            <Text
+              x = { aMintCross.x-6 }
+              y = { aMintCross.y-8 }
+              text = "X"
+              fontSize={18}
+              fontStyle="bold"
+              fill="white"
+              verticalAlign="top"
+              align="left"
+              opacity= {0.7}
+              onClick={closeDialogHandler}
+            />
+          </Group>
+        }
+
         <Rect
           width={aDiscord.width}
           height={aDiscord.height}
