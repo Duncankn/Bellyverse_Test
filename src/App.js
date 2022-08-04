@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { connect } from "./redux/blockchain/blockchainActions";
 import { fetchData } from "./redux/data/dataActions";
-import { Stage, Layer, Image, Text, Rect, Circle, Group} from "react-konva";
+import { Stage, Layer, Image, Text, Rect, Circle, Group } from "react-konva";
 import useImage from "use-image";
 import Konva from "konva";
 
@@ -226,7 +226,7 @@ function App() {
     width: (discord.width * maxWidth) / width,
     height: (discord.height * maxWidth) / width
   };
-///////Minting dialog
+  ///////Minting dialog
   const aMintBox = {
     x: (mintBox.x * maxWidth) / width,
     y: (mintBox.y * maxWidth) / width,
@@ -236,29 +236,29 @@ function App() {
 
   const aMintText = {
     x: (mintBox.x * maxWidth) / width + mintBox.width - 100,
-    y: (mintBox.y * maxWidth) / width + aMintBox.height*20 - 30,
+    y: (mintBox.y * maxWidth) / width + aMintBox.height * 20 - 30,
     width: mintBox.width,
     height: (mintBox.height * maxWidth) / width
   };
 
   const aMintQty = {
     x: (mintBox.x * maxWidth) / width + aMintBox.width / 2,
-    y: (mintBox.y * maxWidth) / width + aMintBox.height*20 / 2
+    y: (mintBox.y * maxWidth) / width + (aMintBox.height * 20) / 2
   };
 
   const aMintMinus = {
     x: (mintBox.x * maxWidth) / width + aMintBox.width / 2 - 50,
-    y: (mintBox.y * maxWidth) / width + aMintBox.height*20 / 2
+    y: (mintBox.y * maxWidth) / width + (aMintBox.height * 20) / 2
   };
 
   const aMintPlus = {
     x: (mintBox.x * maxWidth) / width + aMintBox.width / 2 + 50,
-    y: (mintBox.y * maxWidth) / width + aMintBox.height*20 / 2
+    y: (mintBox.y * maxWidth) / width + (aMintBox.height * 20) / 2
   };
 
   const aMintCross = {
     x: (mintBox.x * maxWidth) / width + mintBox.width,
-    y: (mintBox.y * maxWidth) / width + aMintBox.height,
+    y: (mintBox.y * maxWidth) / width + aMintBox.height
   };
 
   //================================================
@@ -346,23 +346,23 @@ function App() {
   }
 
   useEffect(() => {
-    if(!mintDialog) {
+    if (!mintDialog) {
       return;
     }
     var period = 300;
-    var anim = new Konva.Animation(frame => {
-      var scale = (frame.time/period <= 1)?(20 * (frame.time / period)):20;
-      dialogRef.current.scale({y: scale}); 
+    var anim = new Konva.Animation((frame) => {
+      var scale = frame.time / period <= 1 ? 20 * (frame.time / period) : 20;
+      dialogRef.current.scale({ y: scale });
     }, dialogRef.current.getLayer());
-    
+
     anim.start();
     setDialogAnimeStarted(true);
 
     return () => {
       anim.stop();
       setDialogAnimeEnded(true);
-    }
-  },[mintDialog]);
+    };
+  }, [mintDialog]);
 
   return (
     <Stage
@@ -376,7 +376,12 @@ function App() {
       <Layer>
         {/*<Text text="TEST" fontSize="20" fill="red" />*/}
 
-        <Text text={text} fontSize="20" fill="red" />
+        <Text
+          text={text}
+          fontFamily="Press Start 2P"
+          fontSize="20"
+          fill="red"
+        />
         <Rect
           id="Market"
           width={aMarket.width}
@@ -388,6 +393,7 @@ function App() {
           onMouseEnter={handleMarketEnter}
           onMouseLeave={handleMarketLeave}
           onClick={handleMarketClick}
+          onTap={handleMarketClick}
         />
         <Rect
           width={aWallet.width}
@@ -399,6 +405,7 @@ function App() {
           onMouseEnter={handleWalletEnter}
           onMouseLeave={handleWalletLeave}
           onClick={handleWalletClick}
+          onTap={handleWalletClick}
         />
         <Rect
           width={aLab.width}
@@ -410,11 +417,12 @@ function App() {
           onMouseEnter={handleLabEnter}
           onMouseLeave={handleLabLeave}
           onClick={handleLabClick}
+          onTap={handleLabClick}
         />
-        {mintDialog &&
+        {mintDialog && (
           <Group>
             <Rect
-              ref= {dialogRef}
+              ref={dialogRef}
               width={aMintBox.width}
               height={aMintBox.height}
               x={aMintBox.x}
@@ -428,7 +436,7 @@ function App() {
               text="Mint Belly NFT"
               fontSize={18}
               fontStyle="bold"
-              fontFamily="'Press Start 2P'"
+              fontFamily="Press Start 2P"
               fill="white"
               width={aMintBox.width}
               padding={5}
@@ -439,12 +447,13 @@ function App() {
               y={aMintMinus.y}
               text="-"
               fontSize={18}
-              fontFamily="'Press Start 2P'"
+              fontFamily="Press Start 2P"
               fill={isMintMinusHover ? "red" : "white"}
               padding={5}
               verticalAlign="middle"
               align="center"
               onClick={decrementMintAmount}
+              onTap={decrementMintAmount}
               onMouseEnter={handleMintMinusEnter}
               onMouseLeave={handleMintMinusLeave}
             />
@@ -453,7 +462,7 @@ function App() {
               y={aMintQty.y}
               text={mintAmount}
               fontSize={18}
-              fontFamily="'Press Start 2P'"
+              fontFamily="Press Start 2P"
               fill="white"
               padding={5}
               verticalAlign="middle"
@@ -464,12 +473,13 @@ function App() {
               y={aMintPlus.y}
               text="+"
               fontSize={18}
-              fontFamily="'Press Start 2P'"
+              fontFamily="Press Start 2P"
               fill={isMintPlusHover ? "red" : "white"}
               padding={5}
               verticalAlign="middle"
               align="center"
               onClick={incrementMintAmount}
+              onTap={incrementMintAmount}
               onMouseEnter={handleMintPlusEnter}
               onMouseLeave={handleMintPlusLeave}
             />
@@ -478,36 +488,39 @@ function App() {
               y={aMintText.y}
               text="Mint"
               fontSize={18}
-              fontFamily="'Press Start 2P'"
+              fontFamily="Press Start 2P"
               fill={isMintTextHover ? "red" : "white"}
               padding={5}
               verticalAlign="bottom"
               align="right"
               onClick={handleMintClick}
+              onTap={handleMintClick}
               onMouseEnter={handleMintTextEnter}
               onMouseLeave={handleMintTextLeave}
             />
             <Circle
-              x = { aMintCross.x }
-              y = { aMintCross.y }
+              x={aMintCross.x}
+              y={aMintCross.y}
               radius={10}
               fill="black"
               onClick={closeDialogHandler}
+              onTap={closeDialogHandler}
             />
             <Text
-              x = { aMintCross.x-6 }
-              y = { aMintCross.y-8 }
-              text = "X"
+              x={aMintCross.x - 6}
+              y={aMintCross.y - 8}
+              text="X"
               fontSize={18}
               fontStyle="bold"
               fill="white"
               verticalAlign="top"
               align="left"
-              opacity= {0.7}
+              opacity={0.7}
               onClick={closeDialogHandler}
+              onTap={closeDialogHandler}
             />
           </Group>
-        }
+        )}
 
         <Rect
           width={aDiscord.width}
@@ -519,6 +532,7 @@ function App() {
           onMouseEnter={handleDiscordEnter}
           onMouseLeave={handleDiscordLeave}
           onClick={handleDiscordClick}
+          onTap={handleDiscordClick}
         />
       </Layer>
     </Stage>
