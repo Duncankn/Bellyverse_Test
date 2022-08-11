@@ -2,7 +2,16 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { connect } from "./redux/blockchain/blockchainActions";
 import { fetchData } from "./redux/data/dataActions";
-import { Stage, Layer, Image, Text, Rect, Circle, Group } from "react-konva";
+import {
+  Stage,
+  Layer,
+  Image,
+  Text,
+  Rect,
+  Circle,
+  Group,
+  Line
+} from "react-konva";
 import useImage from "use-image";
 import Konva from "konva";
 
@@ -21,8 +30,10 @@ const Spaceship = () => {
 
 function App() {
   const dialogRef = React.useRef();
+  const logoRef = React.useRef();
   const dispatch = useDispatch();
   const blockchain = useSelector((state) => state.blockchain);
+  const [isWalletConnected, setWalletIsConnected] = useState(false);
   const data = useSelector((state) => state.data);
   const [claimingNft, setClaimingNft] = useState(false);
   const [feedback, setFeedback] = useState(`Click buy to mint your NFT.`);
@@ -30,6 +41,7 @@ function App() {
   const [mintDialog, setMintDialog] = useState(false);
   const [dialogAnimeStarted, setDialogAnimeStarted] = useState(false);
   const [dialogAnimeEnded, setDialogAnimeEnded] = useState(false);
+  const [logo] = useImage("/config/images/polygon.svg");
   const [CONFIG, SET_CONFIG] = useState({
     CONTRACT_ADDRESS: "",
     SCAN_LINK: "",
@@ -49,6 +61,21 @@ function App() {
     SHOW_BACKGROUND: false
   });
 
+  const [state, setState] = React.useState({
+    cursor: {
+      x: null,
+      y: null
+    }
+  });
+
+  const [isMarketHover, setMarketIsHover] = React.useState(false);
+  const [isWalletHover, setWalletIsHover] = React.useState(false);
+  const [isLabHover, setLabIsHover] = React.useState(false);
+  const [isDiscordHover, setDiscordIsHover] = React.useState(false);
+  const [isMintTextHover, setMintTextIsHover] = React.useState(false);
+  const [isMintMinusHover, setMintMinusIsHover] = React.useState(false);
+  const [isMintPlusHover, setMintPlusIsHover] = React.useState(false);
+
   const market = {
     x: 0,
     y: 0,
@@ -67,7 +94,25 @@ function App() {
     x: 766,
     y: 433,
     width: 580,
-    height: 220
+    height: 220,
+    vertice: [
+      766,
+      433,
+      860,
+      433,
+      860,
+      382,
+      1250,
+      382,
+      1250,
+      433,
+      1346,
+      433,
+      1346,
+      650,
+      766,
+      650
+    ]
   };
 
   const mintBox = {
@@ -78,26 +123,12 @@ function App() {
   };
 
   const discord = {
-    x: 0,
-    y: 870,
+    x: 400,
+    y: 400,
     width: 190,
-    height: 130
+    height: 130,
+    vertice: [0, 870, 190, 870, 190, 910, 125, 910, 36, 1000, 0, 1000]
   };
-
-  const [state, setState] = React.useState({
-    cursor: {
-      x: null,
-      y: null
-    }
-  });
-
-  const [isMarketHover, setMarketIsHover] = React.useState(false);
-  const [isWalletHover, setWalletIsHover] = React.useState(false);
-  const [isLabHover, setLabIsHover] = React.useState(false);
-  const [isDiscordHover, setDiscordIsHover] = React.useState(false);
-  const [isMintTextHover, setMintTextIsHover] = React.useState(false);
-  const [isMintMinusHover, setMintMinusIsHover] = React.useState(false);
-  const [isMintPlusHover, setMintPlusIsHover] = React.useState(false);
 
   const handleMouseMove = (e) => {
     var stage = e.currentTarget;
@@ -217,14 +248,18 @@ function App() {
     x: (lab.x * maxWidth) / width,
     y: (lab.y * maxWidth) / width,
     width: (lab.width * maxWidth) / width,
-    height: (lab.height * maxWidth) / width
+    height: (lab.height * maxWidth) / width,
+    vertice: lab.vertice.map((data) => {
+      return (data * maxWidth) / width;
+    })
   };
 
   const aDiscord = {
     x: (discord.x * maxWidth) / width,
     y: (discord.y * maxWidth) / width,
-    width: (discord.width * maxWidth) / width,
-    height: (discord.height * maxWidth) / width
+    vertice: discord.vertice.map((data) => {
+      return (data * maxWidth) / width;
+    })
   };
   ///////Minting dialog
   const aMintBox = {
@@ -315,6 +350,7 @@ function App() {
   const getData = () => {
     if (blockchain.account !== "" && blockchain.smartContract !== null) {
       dispatch(fetchData(blockchain.account));
+      setWalletIsConnected(true);
     } else {
       dispatch(connect());
       dispatch(fetchData(blockchain.account));
@@ -346,6 +382,22 @@ function App() {
   }
 
   useEffect(() => {
+    if (!isWalletConnected) {
+      return;
+    }
+    var anim = new Konva.Animation((frame) => {
+      const centerY = (50 * maxWidth) / width;
+      const period = 3000;
+      const offset = (20 * maxWidth) / width;
+      logoRef.current.y(
+        centerY + offset * Math.sin((frame.time * 2 * Math.PI) / period)
+      );
+    }, logoRef.current.getLayer());
+
+    anim.start();
+  }, [isWalletConnected]);
+
+  useEffect(() => {
     if (!mintDialog) {
       return;
     }
@@ -375,7 +427,6 @@ function App() {
       </Layer>
       <Layer>
         {/*<Text text="TEST" fontSize="20" fill="red" />*/}
-
         <Text
           text={text}
           fontFamily="Press Start 2P"
@@ -407,11 +458,19 @@ function App() {
           onClick={handleWalletClick}
           onTap={handleWalletClick}
         />
-        <Rect
-          width={aLab.width}
-          height={aLab.height}
-          x={aLab.x}
-          y={aLab.y}
+        {isWalletConnected && (
+          <Image
+            ref={logoRef}
+            image={logo}
+            width={(120 * maxWidth) / width}
+            height={(90 * maxWidth) / width}
+            x={(800 * maxWidth) / width}
+            y={(50 * maxWidth) / width}
+          />
+        )}
+        <Line
+          points={aLab.vertice}
+          closed
           fill="white"
           opacity={isLabHover ? 0.5 : 0}
           onMouseEnter={handleLabEnter}
@@ -521,12 +580,9 @@ function App() {
             />
           </Group>
         )}
-
-        <Rect
-          width={aDiscord.width}
-          height={aDiscord.height}
-          x={aDiscord.x}
-          y={aDiscord.y}
+        <Line
+          points={aDiscord.vertice}
+          closed
           fill="white"
           opacity={isDiscordHover ? 0.5 : 0}
           onMouseEnter={handleDiscordEnter}
