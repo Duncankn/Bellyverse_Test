@@ -14,6 +14,7 @@ import {
 } from "react-konva";
 import useImage from "use-image";
 import Konva from "konva";
+import GifImage from "./components/gifImage";
 
 //spaceship
 //================================================
@@ -25,7 +26,14 @@ const ratio = height / width;
 
 const Spaceship = () => {
   const [image] = useImage("/config/images/spaceshipBelly.png");
-  return <Image image={image} height={maxWidth * ratio} width={maxWidth} />;
+  return (
+    <Image
+      className="spaceship"
+      image={image}
+      height={maxWidth * ratio}
+      width={maxWidth}
+    />
+  );
 };
 
 function App() {
@@ -42,6 +50,7 @@ function App() {
   const [dialogAnimeStarted, setDialogAnimeStarted] = useState(false);
   const [dialogAnimeEnded, setDialogAnimeEnded] = useState(false);
   const [logo] = useImage("/config/images/polygon.svg");
+  const spectrum = "/config/images/spectrum.gif";
   const [CONFIG, SET_CONFIG] = useState({
     CONTRACT_ADDRESS: "",
     SCAN_LINK: "",
@@ -128,6 +137,13 @@ function App() {
     width: 190,
     height: 130,
     vertice: [0, 870, 190, 870, 190, 910, 125, 910, 36, 1000, 0, 1000]
+  };
+
+  const musicPlayer = {
+    x: 690,
+    y: 832,
+    width: 96,
+    height: 62
   };
 
   const handleMouseMove = (e) => {
@@ -296,6 +312,13 @@ function App() {
     y: (mintBox.y * maxWidth) / width + aMintBox.height
   };
 
+  const aMusicPlayer = {
+    x: (musicPlayer.x * maxWidth) / width,
+    y: (musicPlayer.y * maxWidth) / width,
+    width: (musicPlayer.width * maxWidth) / width,
+    height: (musicPlayer.height * maxWidth) / width
+  };
+
   //================================================
 
   const claimNFTs = () => {
@@ -427,6 +450,13 @@ function App() {
       </Layer>
       <Layer>
         {/*<Text text="TEST" fontSize="20" fill="red" />*/}
+        <GifImage
+          src={spectrum}
+          width={aMusicPlayer.width}
+          height={aMusicPlayer.height}
+          x={aMusicPlayer.x}
+          y={aMusicPlayer.y}
+        />
         <Text
           text={text}
           fontFamily="Press Start 2P"
