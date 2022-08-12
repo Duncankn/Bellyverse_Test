@@ -15,6 +15,10 @@ html {
   color: rgb(183, 221, 221);
 }
 
+.spaceship {
+  image-rendering: pixelated;
+}
+
 nav {
   display: flex;
   align-items: center;

@@ -81,6 +81,7 @@ function App() {
   const [isWalletHover, setWalletIsHover] = React.useState(false);
   const [isLabHover, setLabIsHover] = React.useState(false);
   const [isDiscordHover, setDiscordIsHover] = React.useState(false);
+  const [isBarHover, setBarIsHover] = React.useState(false);
   const [isMintTextHover, setMintTextIsHover] = React.useState(false);
   const [isMintMinusHover, setMintMinusIsHover] = React.useState(false);
   const [isMintPlusHover, setMintPlusIsHover] = React.useState(false);
@@ -137,6 +138,13 @@ function App() {
     width: 190,
     height: 130,
     vertice: [0, 870, 190, 870, 190, 910, 125, 910, 36, 1000, 0, 1000]
+  };
+
+  const twitter = {
+    x: 45,
+    y: 432,
+    width: 295,
+    height: 410
   };
 
   const musicPlayer = {
@@ -242,6 +250,21 @@ function App() {
     window.open("https://discord.gg/egDG48vUzU", "_blank");
   };
 
+  const handleBarEnter = (e) => {
+    setBarIsHover(true);
+  };
+
+  const handleBarLeave = (e) => {
+    setBarIsHover(false);
+  };
+
+  const handleBarClick = (e) => {
+    window.open(
+      "https://twitter.com/BellyCustomNFT?s=20&t=y05Mv05oV5A8Fhg9yaBcOA",
+      "_blank"
+    );
+  };
+
   const absX = (state.cursor.x * width) / maxWidth;
   const absY = (state.cursor.y * width) / maxWidth;
   const text = `X: ${absX}, Y: ${absY}`;
@@ -276,6 +299,13 @@ function App() {
     vertice: discord.vertice.map((data) => {
       return (data * maxWidth) / width;
     })
+  };
+
+  const aTwitter = {
+    x: (twitter.x * maxWidth) / width,
+    y: (twitter.y * maxWidth) / width,
+    width: (twitter.width * maxWidth) / width,
+    height: (twitter.height * maxWidth) / width
   };
   ///////Minting dialog
   const aMintBox = {
@@ -619,6 +649,19 @@ function App() {
           onMouseLeave={handleDiscordLeave}
           onClick={handleDiscordClick}
           onTap={handleDiscordClick}
+        />
+        <Rect
+          id="twitter"
+          width={aTwitter.width}
+          height={aTwitter.height}
+          x={aTwitter.x}
+          y={aTwitter.y}
+          fill="white"
+          opacity={isBarHover ? 0.5 : 0}
+          onMouseEnter={handleBarEnter}
+          onMouseLeave={handleBarLeave}
+          onClick={handleBarClick}
+          onTap={handleBarClick}
         />
       </Layer>
     </Stage>
