@@ -15,6 +15,7 @@ import {
 import useImage from "use-image";
 import Konva from "konva";
 import GifImage from "./components/gifImage";
+import Tooltip from "./components/tooltip";
 
 //spaceship
 //================================================
@@ -77,6 +78,9 @@ function App() {
     }
   });
 
+  const [isTooltipVisible, setTooltipVisible] = React.useState(false);
+  const [tooltipText, setTooltipText] = React.useState("");
+
   const [isMarketHover, setMarketIsHover] = React.useState(false);
   const [isWalletHover, setWalletIsHover] = React.useState(false);
   const [isLabHover, setLabIsHover] = React.useState(false);
@@ -133,8 +137,8 @@ function App() {
   };
 
   const discord = {
-    x: 400,
-    y: 400,
+    x: 190,
+    y: 870,
     width: 190,
     height: 130,
     vertice: [0, 870, 190, 870, 190, 910, 125, 910, 36, 1000, 0, 1000]
@@ -164,10 +168,13 @@ function App() {
 
   const handleMarketEnter = (e) => {
     setMarketIsHover(true);
+    setTooltipText("Market");
+    setTooltipVisible(true);
   };
 
   const handleMarketLeave = (e) => {
     setMarketIsHover(false);
+    setTooltipVisible(false);
   };
 
   const handleMarketClick = (e) => {
@@ -176,10 +183,13 @@ function App() {
 
   const handleWalletEnter = (e) => {
     setWalletIsHover(true);
+    setTooltipText("Connect");
+    setTooltipVisible(true);
   };
 
   const handleWalletLeave = (e) => {
     setWalletIsHover(false);
+    setTooltipVisible(false);
   };
 
   const handleWalletClick = (e) => {
@@ -189,10 +199,13 @@ function App() {
 
   const handleLabEnter = (e) => {
     setLabIsHover(true);
+    setTooltipText("Belly Lab");
+    setTooltipVisible(true);
   };
 
   const handleLabLeave = (e) => {
     setLabIsHover(false);
+    setTooltipVisible(false);
   };
 
   const handleLabClick = (e) => {
@@ -240,10 +253,13 @@ function App() {
 
   const handleDiscordEnter = (e) => {
     setDiscordIsHover(true);
+    setTooltipText("Discord");
+    setTooltipVisible(true);
   };
 
   const handleDiscordLeave = (e) => {
     setDiscordIsHover(false);
+    setTooltipVisible(false);
   };
 
   const handleDiscordClick = (e) => {
@@ -252,10 +268,13 @@ function App() {
 
   const handleBarEnter = (e) => {
     setBarIsHover(true);
+    setTooltipText("Twitter");
+    setTooltipVisible(true);
   };
 
   const handleBarLeave = (e) => {
     setBarIsHover(false);
+    setTooltipVisible(false);
   };
 
   const handleBarClick = (e) => {
@@ -506,6 +525,12 @@ function App() {
           onClick={handleMarketClick}
           onTap={handleMarketClick}
         />
+        <Tooltip
+          x={(aMarket.width + aMarket.x) / 2}
+          y={(aMarket.height + aMarket.y) / 2}
+          text={tooltipText}
+          isVisible={isMarketHover}
+        />
         <Rect
           width={aWallet.width}
           height={aWallet.height}
@@ -517,6 +542,12 @@ function App() {
           onMouseLeave={handleWalletLeave}
           onClick={handleWalletClick}
           onTap={handleWalletClick}
+        />
+        <Tooltip
+          x={aWallet.width / 2 + aWallet.x}
+          y={aWallet.height / 2 + aWallet.y}
+          text={tooltipText}
+          isVisible={isWalletHover}
         />
         {isWalletConnected && (
           <Image
@@ -537,6 +568,12 @@ function App() {
           onMouseLeave={handleLabLeave}
           onClick={handleLabClick}
           onTap={handleLabClick}
+        />
+        <Tooltip
+          x={aLab.width / 2 + aLab.x}
+          y={aLab.height / 2 + aLab.y}
+          text={tooltipText}
+          isVisible={isLabHover}
         />
         {mintDialog && (
           <Group>
@@ -650,6 +687,12 @@ function App() {
           onClick={handleDiscordClick}
           onTap={handleDiscordClick}
         />
+        <Tooltip
+          x={aDiscord.x}
+          y={aDiscord.y}
+          text={tooltipText}
+          isVisible={isDiscordHover}
+        />
         <Rect
           id="twitter"
           width={aTwitter.width}
@@ -662,6 +705,12 @@ function App() {
           onMouseLeave={handleBarLeave}
           onClick={handleBarClick}
           onTap={handleBarClick}
+        />
+        <Tooltip
+          x={aTwitter.width / 2 + aTwitter.x}
+          y={aTwitter.height / 2 + aTwitter.y}
+          text={tooltipText}
+          isVisible={isBarHover}
         />
       </Layer>
     </Stage>
