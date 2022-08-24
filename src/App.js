@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { connect } from "./redux/blockchain/blockchainActions";
 import { fetchData } from "./redux/data/dataActions";
+
 import {
   Stage,
   Layer,
@@ -10,19 +11,20 @@ import {
   Rect,
   Circle,
   Group,
-  Line
+  Line,
+  Sprite
 } from "react-konva";
 import useImage from "use-image";
 import Konva from "konva";
-import GifImage from "./components/gifImage";
 import Tooltip from "./components/tooltip";
+import useAudio from "./components/useAudio";
 
 //spaceship
 //================================================
 const maxWidth = window.innerWidth * 0.98;
 //const maxHeight = window.innerHeight * 0.98;
-const width = 2016;
-const height = 1296;
+const width = 2160;
+const height = 1440;
 const ratio = height / width;
 
 const Spaceship = () => {
@@ -51,7 +53,9 @@ function App() {
   const [dialogAnimeStarted, setDialogAnimeStarted] = useState(false);
   const [dialogAnimeEnded, setDialogAnimeEnded] = useState(false);
   const [logo] = useImage("/config/images/polygon.svg");
-  const spectrum = "/config/images/spectrum.gif";
+  const [music] = useImage("/config/images/music-icon.png");
+  const [noMusic] = useImage("/config/images/music-off-icon.png");
+  const bgmUrl = "/config/06 Kowloon.mp3";
   const [CONFIG, SET_CONFIG] = useState({
     CONTRACT_ADDRESS: "",
     SCAN_LINK: "",
@@ -77,6 +81,94 @@ function App() {
       y: null
     }
   });
+  //======================================================================
+  //BGM player
+
+  const [playing, toggle] = useAudio(bgmUrl);
+
+  //======================================================================
+  const [spriteOptions, setSpriteOptions] = useState({
+    image: null
+  });
+
+  const spriteRef = useRef();
+  const [direction, setDirection] = useState({
+    state: "walkDown"
+  });
+
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/npc01.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setSpriteOptions({
+        image: image
+      });
+      spriteRef.current.start();
+    };
+  }, [direction.state]);
+
+  const animations = {
+    walkDown: [0, 0, 96, 96, 96, 0, 96, 96, 194, 0, 96, 96, 290, 0, 96, 96],
+    walkUp: [0, 96, 96, 96, 96, 96, 96, 96, 194, 96, 96, 96, 290, 96, 96, 96],
+    idleDown: [0, 0, 96, 96],
+    idleUp: [0, 96, 96, 96]
+  };
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 20;
+      if (direction.state !== "walkDown") {
+        return;
+      }
+      //spriteRef.current.y(frame.time / period);
+
+      //Math.floor(frame.time / period) ? 20 * (frame.time / period) : 20;
+      spriteRef.current.y() > (300 * maxWidth) / width
+        ? setDirection({ state: "idleDown" })
+        : spriteRef.current.y((50 * maxWidth) / width + frame.time / period);
+      //spriteRef.current.y((frame.time) / period);
+    }, spriteRef.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+      //setDirection({ state: "walkUp" });
+    };
+  }, [direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 20;
+      if (direction.state !== "walkUp") {
+        return;
+      }
+
+      spriteRef.current.y() < (50 * maxWidth) / width
+        ? setDirection({ state: "idleUp" })
+        : spriteRef.current.y((300 * maxWidth) / width - frame.time / period);
+    }, spriteRef.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [direction.state]);
+
+  useEffect(() => {
+    if (direction.state === "idleDown") {
+      setDirection({ state: "walkUp" });
+    }
+    if (direction.state === "idleUp") {
+      setDirection({ state: "walkDown" });
+    }
+  }, [direction.state]);
+
+  const handleNpcClick = (e) => {
+    setDirection({ state: "idleUp" });
+  };
+
+  //==========================================================================
 
   const [isTooltipVisible, setTooltipVisible] = React.useState(false);
   const [tooltipText, setTooltipText] = React.useState("");
@@ -89,16 +181,17 @@ function App() {
   const [isMintTextHover, setMintTextIsHover] = React.useState(false);
   const [isMintMinusHover, setMintMinusIsHover] = React.useState(false);
   const [isMintPlusHover, setMintPlusIsHover] = React.useState(false);
+  const [isBgmHover, setBgmIsHover] = React.useState(false);
 
   const market = {
     x: 0,
     y: 0,
-    width: 485,
-    height: 410
+    width: 575,
+    height: 462
   };
 
   const wallet = {
-    x: 670,
+    x: 765,
     y: 0,
     width: 390,
     height: 220
@@ -106,26 +199,26 @@ function App() {
 
   const lab = {
     x: 766,
-    y: 433,
+    y: 483,
     width: 580,
     height: 220,
     vertice: [
       766,
-      433,
+      483,
       860,
-      433,
+      483,
       860,
-      382,
+      432,
       1250,
-      382,
+      432,
       1250,
-      433,
+      483,
       1346,
-      433,
+      483,
       1346,
-      650,
+      700,
       766,
-      650
+      700
     ]
   };
 
@@ -141,19 +234,19 @@ function App() {
     y: 870,
     width: 190,
     height: 130,
-    vertice: [0, 870, 190, 870, 190, 910, 125, 910, 36, 1000, 0, 1000]
+    vertice: [0, 920, 190, 920, 190, 960, 125, 960, 36, 1050, 0, 1050]
   };
 
   const twitter = {
     x: 45,
-    y: 432,
+    y: 480,
     width: 295,
     height: 410
   };
 
   const musicPlayer = {
     x: 690,
-    y: 832,
+    y: 880,
     width: 96,
     height: 62
   };
@@ -282,6 +375,21 @@ function App() {
       "https://twitter.com/BellyCustomNFT?s=20&t=y05Mv05oV5A8Fhg9yaBcOA",
       "_blank"
     );
+  };
+
+  const handleBgmEnter = (e) => {
+    setBgmIsHover(true);
+    setTooltipText("Music");
+    setTooltipVisible(true);
+  };
+
+  const handleBgmLeave = (e) => {
+    setBarIsHover(false);
+    setTooltipVisible(false);
+  };
+
+  const handleBgmClick = (e) => {
+    toggle();
   };
 
   const absX = (state.cursor.x * width) / maxWidth;
@@ -498,13 +606,16 @@ function App() {
         <Spaceship />
       </Layer>
       <Layer>
-        {/*<Text text="TEST" fontSize="20" fill="red" />*/}
-        <GifImage
-          src={spectrum}
-          width={aMusicPlayer.width}
-          height={aMusicPlayer.height}
-          x={aMusicPlayer.x}
-          y={aMusicPlayer.y}
+        <Image
+          image={playing ? noMusic : music}
+          width={playing ? (80 * maxWidth) / width : (64 * maxWidth) / width}
+          height={(64 * maxWidth) / width}
+          x={(45 * maxWidth) / width}
+          y={(1350 * maxWidth) / width}
+          onMouseEnter={handleBgmEnter}
+          onMouseLeave={handleBgmLeave}
+          onClick={handleBgmClick}
+          onTap={handleBgmClick}
         />
         <Text
           text={text}
@@ -525,12 +636,6 @@ function App() {
           onClick={handleMarketClick}
           onTap={handleMarketClick}
         />
-        <Tooltip
-          x={(aMarket.width + aMarket.x) / 2}
-          y={(aMarket.height + aMarket.y) / 2}
-          text={tooltipText}
-          isVisible={isMarketHover}
-        />
         <Rect
           width={aWallet.width}
           height={aWallet.height}
@@ -543,19 +648,13 @@ function App() {
           onClick={handleWalletClick}
           onTap={handleWalletClick}
         />
-        <Tooltip
-          x={aWallet.width / 2 + aWallet.x}
-          y={aWallet.height / 2 + aWallet.y}
-          text={tooltipText}
-          isVisible={isWalletHover}
-        />
         {isWalletConnected && (
           <Image
             ref={logoRef}
             image={logo}
             width={(120 * maxWidth) / width}
             height={(90 * maxWidth) / width}
-            x={(800 * maxWidth) / width}
+            x={(900 * maxWidth) / width}
             y={(50 * maxWidth) / width}
           />
         )}
@@ -568,12 +667,6 @@ function App() {
           onMouseLeave={handleLabLeave}
           onClick={handleLabClick}
           onTap={handleLabClick}
-        />
-        <Tooltip
-          x={aLab.width / 2 + aLab.x}
-          y={aLab.height / 2 + aLab.y}
-          text={tooltipText}
-          isVisible={isLabHover}
         />
         {mintDialog && (
           <Group>
@@ -687,12 +780,6 @@ function App() {
           onClick={handleDiscordClick}
           onTap={handleDiscordClick}
         />
-        <Tooltip
-          x={aDiscord.x}
-          y={aDiscord.y}
-          text={tooltipText}
-          isVisible={isDiscordHover}
-        />
         <Rect
           id="twitter"
           width={aTwitter.width}
@@ -707,10 +794,24 @@ function App() {
           onTap={handleBarClick}
         />
         <Tooltip
-          x={aTwitter.width / 2 + aTwitter.x}
-          y={aTwitter.height / 2 + aTwitter.y}
+          x={state.cursor.x}
+          y={state.cursor.y - 15}
           text={tooltipText}
-          isVisible={isBarHover}
+          isVisible={isTooltipVisible}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={spriteRef}
+          image={spriteOptions.image}
+          animation={direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(620 * maxWidth) / width}
+          y={(0 * maxWidth) / width}
+          onClick={handleNpcClick}
         />
       </Layer>
     </Stage>
