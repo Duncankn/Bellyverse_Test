@@ -87,87 +87,620 @@ function App() {
   const [playing, toggle] = useAudio(bgmUrl);
 
   //======================================================================
-  const [spriteOptions, setSpriteOptions] = useState({
-    image: null
-  });
-
-  const spriteRef = useRef();
-  const [direction, setDirection] = useState({
-    state: "walkDown"
-  });
-
-  useEffect(() => {
-    const image = new window.Image();
-    image.src = "/config/images/npc01.png";
-    image.onload = () => {
-      // set image only when it is loaded
-      setSpriteOptions({
-        image: image
-      });
-      spriteRef.current.start();
-    };
-  }, [direction.state]);
+  //NPC Sprite
 
   const animations = {
     walkDown: [0, 0, 96, 96, 96, 0, 96, 96, 194, 0, 96, 96, 290, 0, 96, 96],
     walkUp: [0, 96, 96, 96, 96, 96, 96, 96, 194, 96, 96, 96, 290, 96, 96, 96],
     idleDown: [0, 0, 96, 96],
-    idleUp: [0, 96, 96, 96]
+    idleUp: [0, 96, 96, 96],
+    walkLeft: [0, 0, 96, 96, 96, 0, 96, 96, 194, 0, 96, 96, 290, 0, 96, 96],
+    walkRight: [
+      0,
+      96,
+      96,
+      96,
+      96,
+      96,
+      96,
+      96,
+      194,
+      96,
+      96,
+      96,
+      290,
+      96,
+      96,
+      96
+    ],
+    idleLeft: [0, 0, 96, 96],
+    idleRight: [0, 96, 96, 96]
   };
+
+  const [npc1Options, setNpc1Options] = useState({ image: null });
+  const [npc2Options, setNpc2Options] = useState({ image: null });
+  const [npc3Options, setNpc3Options] = useState({ image: null });
+  const [npc4Options, setNpc4Options] = useState({ image: null });
+  const [npc5Options, setNpc5Options] = useState({ image: null });
+  const [npc6Options, setNpc6Options] = useState({ image: null });
+  const [npc7Options, setNpc7Options] = useState({ image: null });
+  const [npc8Options, setNpc8Options] = useState({ image: null });
+  const [npc9Options, setNpc9Options] = useState({ image: null });
+
+  const range = 100;
+  const npc1position = { x: 620, y: 380 };
+  const npc2position = { x: 1800, y: 200 };
+  const npc3position = { x: 1400, y: 600 };
+  const npc4position = { x: 1600, y: 1000 };
+  const npc5position = { x: 450, y: 850 };
+  const npc6position = { x: 1200, y: 300 };
+  const npc7position = { x: 1100, y: 750 };
+  const npc8position = { x: 150, y: 540 };
+  const npc9position = { x: 1100, y: 1300 };
+
+  const npc1Ref = useRef();
+  const npc2Ref = useRef();
+  const npc3Ref = useRef();
+  const npc4Ref = useRef();
+  const npc5Ref = useRef();
+  const npc6Ref = useRef();
+  const npc7Ref = useRef();
+  const npc8Ref = useRef();
+  const npc9Ref = useRef();
+
+  const [npc1Direction, setNpc1Direction] = useState({ state: "walkDown" });
+  const [npc2Direction, setNpc2Direction] = useState({ state: "walkDown" });
+  const [npc3Direction, setNpc3Direction] = useState({ state: "walkDown" });
+  const [npc4Direction, setNpc4Direction] = useState({ state: "walkDown" });
+  const [npc5Direction, setNpc5Direction] = useState({ state: "walkDown" });
+  const [npc6Direction, setNpc6Direction] = useState({ state: "walkLeft" });
+  const [npc7Direction, setNpc7Direction] = useState({ state: "walkLeft" });
+  const [npc8Direction, setNpc8Direction] = useState({ state: "walkLeft" });
+  const [npc9Direction, setNpc9Direction] = useState({ state: "walkLeft" });
+
+  //NPC1
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/npc01.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setNpc1Options({
+        image: image
+      });
+      npc1Ref.current.start();
+    };
+  }, [npc1Direction.state]);
 
   useEffect(() => {
     var anim = new Konva.Animation((frame) => {
       const period = 20;
-      if (direction.state !== "walkDown") {
+      if (npc1Direction.state !== "walkDown") {
         return;
       }
-      //spriteRef.current.y(frame.time / period);
 
-      //Math.floor(frame.time / period) ? 20 * (frame.time / period) : 20;
-      spriteRef.current.y() > (300 * maxWidth) / width
-        ? setDirection({ state: "idleDown" })
-        : spriteRef.current.y((50 * maxWidth) / width + frame.time / period);
-      //spriteRef.current.y((frame.time) / period);
-    }, spriteRef.current.getLayer());
+      npc1Ref.current.y() > ((npc1position.y + range) * maxWidth) / width
+        ? setNpc1Direction({ state: "idleDown" })
+        : npc1Ref.current.y(
+            ((npc1position.y - range) * maxWidth) / width + frame.time / period
+          );
+    }, npc1Ref.current.getLayer());
 
     anim.start();
     return () => {
       anim.stop();
-      //setDirection({ state: "walkUp" });
     };
-  }, [direction.state]);
+  }, [npc1Direction.state]);
 
   useEffect(() => {
     var anim = new Konva.Animation((frame) => {
       const period = 20;
-      if (direction.state !== "walkUp") {
+      if (npc1Direction.state !== "walkUp") {
         return;
       }
 
-      spriteRef.current.y() < (50 * maxWidth) / width
-        ? setDirection({ state: "idleUp" })
-        : spriteRef.current.y((300 * maxWidth) / width - frame.time / period);
-    }, spriteRef.current.getLayer());
+      npc1Ref.current.y() < ((npc1position.y - range) * maxWidth) / width
+        ? setNpc1Direction({ state: "idleUp" })
+        : npc1Ref.current.y(
+            ((npc1position.y + range) * maxWidth) / width - frame.time / period
+          );
+    }, npc1Ref.current.getLayer());
 
     anim.start();
     return () => {
       anim.stop();
     };
-  }, [direction.state]);
+  }, [npc1Direction.state]);
 
   useEffect(() => {
-    if (direction.state === "idleDown") {
-      setDirection({ state: "walkUp" });
+    if (npc1Direction.state === "idleDown") {
+      setNpc1Direction({ state: "walkUp" });
     }
-    if (direction.state === "idleUp") {
-      setDirection({ state: "walkDown" });
+    if (npc1Direction.state === "idleUp") {
+      setNpc1Direction({ state: "walkDown" });
     }
-  }, [direction.state]);
+  }, [npc1Direction.state]);
 
-  const handleNpcClick = (e) => {
-    setDirection({ state: "idleUp" });
-  };
+  //NPC2
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/npc02.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setNpc2Options({ image: image });
+      npc2Ref.current.start();
+    };
+  }, [npc2Direction.state]);
 
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc2Direction.state !== "walkDown") {
+        return;
+      }
+
+      npc2Ref.current.y() > ((npc2position.y + range) * maxWidth) / width
+        ? setNpc2Direction({ state: "idleDown" })
+        : npc2Ref.current.y(
+            ((npc2position.y - range) * maxWidth) / width + frame.time / period
+          );
+    }, npc2Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc2Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 20;
+      if (npc2Direction.state !== "walkUp") {
+        return;
+      }
+
+      npc2Ref.current.y() < ((npc2position.y - range) * maxWidth) / width
+        ? setNpc2Direction({ state: "idleUp" })
+        : npc2Ref.current.y(
+            ((npc2position.y + range) * maxWidth) / width - frame.time / period
+          );
+    }, npc2Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc2Direction.state]);
+
+  useEffect(() => {
+    if (npc2Direction.state === "idleDown") {
+      setNpc2Direction({ state: "walkUp" });
+    }
+    if (npc2Direction.state === "idleUp") {
+      setNpc2Direction({ state: "walkDown" });
+    }
+  }, [npc2Direction.state]);
+
+  //NPC3
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/npc03.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setNpc3Options({
+        image: image
+      });
+      npc3Ref.current.start();
+    };
+  }, [npc3Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 20;
+      if (npc3Direction.state !== "walkDown") {
+        return;
+      }
+
+      npc3Ref.current.y() > ((npc3position.y + range) * maxWidth) / width
+        ? setNpc3Direction({ state: "idleDown" })
+        : npc3Ref.current.y(
+            ((npc3position.y - range) * maxWidth) / width + frame.time / period
+          );
+    }, npc3Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc3Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 20;
+      if (npc3Direction.state !== "walkUp") {
+        return;
+      }
+
+      npc3Ref.current.y() < ((npc3position.y - range) * maxWidth) / width
+        ? setNpc3Direction({ state: "idleUp" })
+        : npc3Ref.current.y(
+            ((npc3position.y + range) * maxWidth) / width - frame.time / period
+          );
+    }, npc3Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc3Direction.state]);
+
+  useEffect(() => {
+    if (npc3Direction.state === "idleDown") {
+      setNpc3Direction({ state: "walkUp" });
+    }
+    if (npc3Direction.state === "idleUp") {
+      setNpc3Direction({ state: "walkDown" });
+    }
+  }, [npc3Direction.state]);
+
+  //NPC4
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/npc04.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setNpc4Options({ image: image });
+      npc4Ref.current.start();
+    };
+  }, [npc4Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc4Direction.state !== "walkDown") {
+        return;
+      }
+
+      npc4Ref.current.y() > ((npc4position.y + range) * maxWidth) / width
+        ? setNpc4Direction({ state: "idleDown" })
+        : npc4Ref.current.y(
+            ((npc4position.y - range) * maxWidth) / width + frame.time / period
+          );
+    }, npc4Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc4Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 20;
+      if (npc4Direction.state !== "walkUp") {
+        return;
+      }
+
+      npc4Ref.current.y() < ((npc4position.y - range) * maxWidth) / width
+        ? setNpc4Direction({ state: "idleUp" })
+        : npc4Ref.current.y(
+            ((npc4position.y + range) * maxWidth) / width - frame.time / period
+          );
+    }, npc4Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc4Direction.state]);
+
+  useEffect(() => {
+    if (npc4Direction.state === "idleDown") {
+      setNpc4Direction({ state: "walkUp" });
+    }
+    if (npc4Direction.state === "idleUp") {
+      setNpc4Direction({ state: "walkDown" });
+    }
+  }, [npc4Direction.state]);
+
+  //NPC5
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/npc05.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setNpc5Options({ image: image });
+      npc5Ref.current.start();
+    };
+  }, [npc5Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc5Direction.state !== "walkDown") {
+        return;
+      }
+
+      npc5Ref.current.y() > ((npc5position.y + range) * maxWidth) / width
+        ? setNpc5Direction({ state: "idleDown" })
+        : npc5Ref.current.y(
+            ((npc5position.y - range) * maxWidth) / width + frame.time / period
+          );
+    }, npc5Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc5Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 20;
+      if (npc5Direction.state !== "walkUp") {
+        return;
+      }
+
+      npc5Ref.current.y() < ((npc5position.y - range) * maxWidth) / width
+        ? setNpc5Direction({ state: "idleUp" })
+        : npc5Ref.current.y(
+            ((npc5position.y + range) * maxWidth) / width - frame.time / period
+          );
+    }, npc5Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc5Direction.state]);
+
+  useEffect(() => {
+    if (npc5Direction.state === "idleDown") {
+      setNpc5Direction({ state: "walkUp" });
+    }
+    if (npc5Direction.state === "idleUp") {
+      setNpc5Direction({ state: "walkDown" });
+    }
+  }, [npc5Direction.state]);
+
+  //NPC6
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/npc06.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setNpc6Options({ image: image });
+      npc6Ref.current.start();
+    };
+  }, [npc6Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc6Direction.state !== "walkRight") {
+        return;
+      }
+
+      npc6Ref.current.x() > ((npc6position.x + range) * maxWidth) / width
+        ? setNpc6Direction({ state: "idleRight" })
+        : npc6Ref.current.x(
+            ((npc6position.x - range) * maxWidth) / width + frame.time / period
+          );
+    }, npc6Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc6Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc6Direction.state !== "walkLeft") {
+        return;
+      }
+
+      npc6Ref.current.x() < ((npc6position.x - range) * maxWidth) / width
+        ? setNpc6Direction({ state: "idleLeft" })
+        : npc6Ref.current.x(
+            ((npc6position.x + range) * maxWidth) / width - frame.time / period
+          );
+    }, npc6Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc6Direction.state]);
+
+  useEffect(() => {
+    if (npc6Direction.state === "idleLeft") {
+      setNpc6Direction({ state: "walkRight" });
+    }
+    if (npc6Direction.state === "idleRight") {
+      setNpc6Direction({ state: "walkLeft" });
+    }
+  }, [npc6Direction.state]);
+
+  //NPC7
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/npc07.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setNpc7Options({ image: image });
+      npc7Ref.current.start();
+    };
+  }, [npc7Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc7Direction.state !== "walkRight") {
+        return;
+      }
+
+      npc7Ref.current.x() > ((npc7position.x + range) * maxWidth) / width
+        ? setNpc7Direction({ state: "idleRight" })
+        : npc7Ref.current.x(
+            ((npc7position.x - range) * maxWidth) / width + frame.time / period
+          );
+    }, npc7Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc7Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc7Direction.state !== "walkLeft") {
+        return;
+      }
+
+      npc7Ref.current.x() < ((npc7position.x - range) * maxWidth) / width
+        ? setNpc7Direction({ state: "idleLeft" })
+        : npc7Ref.current.x(
+            ((npc7position.x + range) * maxWidth) / width - frame.time / period
+          );
+    }, npc7Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc7Direction.state]);
+
+  useEffect(() => {
+    if (npc7Direction.state === "idleLeft") {
+      setNpc7Direction({ state: "walkRight" });
+    }
+    if (npc7Direction.state === "idleRight") {
+      setNpc7Direction({ state: "walkLeft" });
+    }
+  }, [npc7Direction.state]);
+
+  //NPC8
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/npc08.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setNpc8Options({ image: image });
+      npc8Ref.current.start();
+    };
+  }, [npc8Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc8Direction.state !== "walkRight") {
+        return;
+      }
+
+      npc8Ref.current.x() > ((npc8position.x + range) * maxWidth) / width
+        ? setNpc8Direction({ state: "idleRight" })
+        : npc8Ref.current.x(
+            ((npc8position.x - range) * maxWidth) / width + frame.time / period
+          );
+    }, npc8Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc8Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc8Direction.state !== "walkLeft") {
+        return;
+      }
+
+      npc8Ref.current.x() < ((npc8position.x - range) * maxWidth) / width
+        ? setNpc8Direction({ state: "idleLeft" })
+        : npc8Ref.current.x(
+            ((npc8position.x + range) * maxWidth) / width - frame.time / period
+          );
+    }, npc8Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc8Direction.state]);
+
+  useEffect(() => {
+    if (npc8Direction.state === "idleLeft") {
+      setNpc8Direction({ state: "walkRight" });
+    }
+    if (npc8Direction.state === "idleRight") {
+      setNpc8Direction({ state: "walkLeft" });
+    }
+  }, [npc8Direction.state]);
+
+  //NPC9
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/npc09.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setNpc9Options({ image: image });
+      npc9Ref.current.start();
+    };
+  }, [npc9Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc9Direction.state !== "walkRight") {
+        return;
+      }
+
+      npc9Ref.current.x() > ((npc9position.x + range) * maxWidth) / width
+        ? setNpc9Direction({ state: "idleRight" })
+        : npc9Ref.current.x(
+            ((npc9position.x - range) * maxWidth) / width + frame.time / period
+          );
+    }, npc9Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc9Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc9Direction.state !== "walkLeft") {
+        return;
+      }
+
+      npc9Ref.current.x() < ((npc9position.x - range) * maxWidth) / width
+        ? setNpc9Direction({ state: "idleLeft" })
+        : npc9Ref.current.x(
+            ((npc9position.x + range) * maxWidth) / width - frame.time / period
+          );
+    }, npc9Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc9Direction.state]);
+
+  useEffect(() => {
+    if (npc9Direction.state === "idleLeft") {
+      setNpc9Direction({ state: "walkRight" });
+    }
+    if (npc9Direction.state === "idleRight") {
+      setNpc9Direction({ state: "walkLeft" });
+    }
+  }, [npc9Direction.state]);
   //==========================================================================
 
   const [isTooltipVisible, setTooltipVisible] = React.useState(false);
@@ -803,15 +1336,118 @@ function App() {
           scaleX={maxWidth / width}
           scaleY={maxWidth / width}
           height={1}
-          ref={spriteRef}
-          image={spriteOptions.image}
-          animation={direction.state}
+          ref={npc1Ref}
+          image={npc1Options.image}
+          animation={npc1Direction.state}
           frameRate={8}
           frameIndex={0}
           animations={animations}
-          x={(620 * maxWidth) / width}
-          y={(0 * maxWidth) / width}
-          onClick={handleNpcClick}
+          x={(npc1position.x * maxWidth) / width}
+          y={(npc1position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc2Ref}
+          image={npc2Options.image}
+          animation={npc2Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc2position.x * maxWidth) / width}
+          y={(npc2position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc3Ref}
+          image={npc3Options.image}
+          animation={npc3Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc3position.x * maxWidth) / width}
+          y={(npc3position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc4Ref}
+          image={npc4Options.image}
+          animation={npc4Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc4position.x * maxWidth) / width}
+          y={(npc4position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc5Ref}
+          image={npc5Options.image}
+          animation={npc5Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc5position.x * maxWidth) / width}
+          y={(npc5position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc6Ref}
+          image={npc6Options.image}
+          animation={npc6Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc6position.x * maxWidth) / width}
+          y={(npc6position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc7Ref}
+          image={npc7Options.image}
+          animation={npc7Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc7position.x * maxWidth) / width}
+          y={(npc7position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc8Ref}
+          image={npc8Options.image}
+          animation={npc8Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc8position.x * maxWidth) / width}
+          y={(npc8position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc9Ref}
+          image={npc9Options.image}
+          animation={npc9Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc9position.x * maxWidth) / width}
+          y={(npc9position.y * maxWidth) / width}
         />
       </Layer>
     </Stage>
