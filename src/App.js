@@ -126,6 +126,7 @@ function App() {
   const [npc7Options, setNpc7Options] = useState({ image: null });
   const [npc8Options, setNpc8Options] = useState({ image: null });
   const [npc9Options, setNpc9Options] = useState({ image: null });
+  const [npc10Options, setNpc10Options] = useState({ image: null });
 
   const range = 100;
   const npc1position = { x: 620, y: 380 };
@@ -137,6 +138,7 @@ function App() {
   const npc7position = { x: 1100, y: 750 };
   const npc8position = { x: 150, y: 540 };
   const npc9position = { x: 1100, y: 1300 };
+  const npc10position = { x: 300, y: 300 };
 
   const npc1Ref = useRef();
   const npc2Ref = useRef();
@@ -147,6 +149,7 @@ function App() {
   const npc7Ref = useRef();
   const npc8Ref = useRef();
   const npc9Ref = useRef();
+  const npc10Ref = useRef();
 
   const [npc1Direction, setNpc1Direction] = useState({ state: "walkDown" });
   const [npc2Direction, setNpc2Direction] = useState({ state: "walkDown" });
@@ -157,6 +160,7 @@ function App() {
   const [npc7Direction, setNpc7Direction] = useState({ state: "walkLeft" });
   const [npc8Direction, setNpc8Direction] = useState({ state: "walkLeft" });
   const [npc9Direction, setNpc9Direction] = useState({ state: "walkLeft" });
+  const [npc10Direction, setNpc10Direction] = useState({ state: "walkLeft" });
 
   //NPC1
   useEffect(() => {
@@ -701,6 +705,66 @@ function App() {
       setNpc9Direction({ state: "walkLeft" });
     }
   }, [npc9Direction.state]);
+
+  //NPC10
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/npc10.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setNpc10Options({ image: image });
+      npc10Ref.current.start();
+    };
+  }, [npc10Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc10Direction.state !== "walkRight") {
+        return;
+      }
+
+      npc10Ref.current.x() > ((npc10position.x + range) * maxWidth) / width
+        ? setNpc10Direction({ state: "idleRight" })
+        : npc10Ref.current.x(
+            ((npc10position.x - range) * maxWidth) / width + frame.time / period
+          );
+    }, npc10Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc10Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc10Direction.state !== "walkLeft") {
+        return;
+      }
+
+      npc10Ref.current.x() < ((npc10position.x - range) * maxWidth) / width
+        ? setNpc10Direction({ state: "idleLeft" })
+        : npc10Ref.current.x(
+            ((npc10position.x + range) * maxWidth) / width - frame.time / period
+          );
+    }, npc10Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc10Direction.state]);
+
+  useEffect(() => {
+    if (npc10Direction.state === "idleLeft") {
+      setNpc10Direction({ state: "walkRight" });
+    }
+    if (npc10Direction.state === "idleRight") {
+      setNpc10Direction({ state: "walkLeft" });
+    }
+  }, [npc10Direction.state]);
   //==========================================================================
 
   const [isTooltipVisible, setTooltipVisible] = React.useState(false);
@@ -1448,6 +1512,19 @@ function App() {
           animations={animations}
           x={(npc9position.x * maxWidth) / width}
           y={(npc9position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc10Ref}
+          image={npc10Options.image}
+          animation={npc10Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc10position.x * maxWidth) / width}
+          y={(npc10position.y * maxWidth) / width}
         />
       </Layer>
     </Stage>
