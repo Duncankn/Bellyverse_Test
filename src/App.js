@@ -1,23 +1,22 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { connect } from "./redux/blockchain/blockchainActions";
-import { fetchData } from "./redux/data/dataActions";
-
+import Konva from "konva";
+import React, { useEffect, useRef, useState } from "react";
 import {
-  Stage,
-  Layer,
-  Image,
-  Text,
-  Rect,
   Circle,
   Group,
+  Image,
+  Layer,
   Line,
-  Sprite
+  Rect,
+  Sprite,
+  Stage,
+  Text
 } from "react-konva";
+import { useDispatch, useSelector } from "react-redux";
 import useImage from "use-image";
-import Konva from "konva";
 import Tooltip from "./components/tooltip";
 import useAudio from "./components/useAudio";
+import { connect } from "./redux/blockchain/blockchainActions";
+import { fetchData } from "./redux/data/dataActions";
 
 //spaceship
 //================================================
@@ -113,8 +112,313 @@ function App() {
       96,
       96
     ],
-    idleLeft: [0, 0, 96, 96],
-    idleRight: [0, 96, 96, 96]
+    idleLeft: [290, 0, 96, 96],
+    idleRight: [0, 96, 96, 96],
+    arrow: [
+      0,
+      0,
+      48,
+      48,
+      48,
+      0,
+      48,
+      48,
+      96,
+      0,
+      48,
+      48,
+      144,
+      0,
+      48,
+      48,
+      192,
+      0,
+      48,
+      48
+    ],
+    clothing: [
+      0,
+      0,
+      96,
+      96,
+      96,
+      0,
+      96,
+      96,
+      192,
+      0,
+      96,
+      96,
+      288,
+      0,
+      96,
+      96,
+      384,
+      0,
+      96,
+      96,
+      480,
+      0,
+      96,
+      96,
+      576,
+      0,
+      96,
+      96
+    ],
+    robomart: [
+      0,
+      0,
+      96,
+      96,
+      96,
+      0,
+      96,
+      96,
+      192,
+      0,
+      96,
+      96,
+      288,
+      0,
+      96,
+      96,
+      384,
+      0,
+      96,
+      96,
+      480,
+      0,
+      96,
+      96,
+      576,
+      0,
+      96,
+      96,
+      672,
+      0,
+      96,
+      96,
+      768,
+      0,
+      96,
+      96,
+      864,
+      0,
+      96,
+      96
+    ],
+    recharging: [
+      0,
+      0,
+      144,
+      144,
+      144,
+      0,
+      144,
+      144,
+      288,
+      0,
+      144,
+      144,
+      432,
+      0,
+      144,
+      144
+    ],
+    discoArea: [
+      0,
+      0,
+      240,
+      192,
+      240,
+      0,
+      240,
+      192,
+      480,
+      0,
+      240,
+      192,
+      720,
+      0,
+      240,
+      192
+    ],
+    teleporter: [
+      0,
+      0,
+      192,
+      192,
+      192,
+      0,
+      192,
+      192,
+      384,
+      0,
+      192,
+      192,
+      576,
+      0,
+      192,
+      192,
+      768,
+      0,
+      192,
+      192,
+      960,
+      0,
+      192,
+      192,
+      1152,
+      0,
+      192,
+      192,
+      1344,
+      0,
+      192,
+      192,
+      1536,
+      0,
+      192,
+      192,
+      1728,
+      0,
+      192,
+      192,
+      1920,
+      0,
+      192,
+      192,
+      2112,
+      0,
+      192,
+      192,
+      2304,
+      0,
+      192,
+      192,
+      2496,
+      0,
+      192,
+      192,
+      2688,
+      0,
+      192,
+      192,
+      2880,
+      0,
+      192,
+      192,
+      3072,
+      0,
+      192,
+      192,
+      3264,
+      0,
+      192,
+      192
+    ],
+    voteSign: [
+      0, // frame 1
+      0,
+      144,
+      96, 
+      144,// frame 2
+      0,
+      144,
+      96,
+      288,// frame 3
+      0,
+      144,
+      96,
+      432,// frame 4
+      0,
+      144,
+      96,
+      576,// frame 5
+      0,
+      144,
+      96,
+      720,// frame 6
+      0,
+      144,
+      96,
+      864,// frame 7
+      0,
+      144,
+      96,
+      1008,// frame 8
+      0,
+      144,
+      96,
+      1152,// frame 9
+      0,
+      144,
+      96
+      //1296,0,144,96
+    ],
+    bellyPool: [
+      0,
+      0,
+      192,
+      192,
+      192,
+      0,
+      192,
+      192,
+      384,
+      0,
+      192,
+      192,
+      576,
+      0,
+      192,
+      192
+    ],
+    scanner: [
+      0,
+      0,
+      144,
+      192,
+      144,
+      0,
+      144,
+      192,
+      288,
+      0,
+      144,
+      192,
+      432,
+      0,
+      144,
+      192,
+      576,
+      0,
+      144,
+      192
+    ],
+    petOwners: [
+      0,
+      0,
+      144,
+      144,
+      144,
+      0,
+      144,
+      144,
+      288,
+      0,
+      144,
+      144,
+      432,
+      0,
+      144,
+      144,
+      576,
+      0,
+      144,
+      144
+    ]
   };
 
   const [npc1Options, setNpc1Options] = useState({ image: null });
@@ -127,8 +431,25 @@ function App() {
   const [npc8Options, setNpc8Options] = useState({ image: null });
   const [npc9Options, setNpc9Options] = useState({ image: null });
   const [npc10Options, setNpc10Options] = useState({ image: null });
+  const [npc11Options, setNpc11Options] = useState({ image: null });
+  const [npc12Options, setNpc12Options] = useState({ image: null });
+  const [arrowOptions, setArrowOptions] = useState({ image: null });
+  const [clothingOptions, setClothingOptions] = useState({ image: null });
+  const [roboOptions, setRoboOptions] = useState({ image: null });
+  const [rechargingOptions, setRechargingOptions] = useState({ image: null });
+  const [discoOptions, setDiscoOptions] = useState({ image: null });
+  const [teleporterOptions, setTeleporterOptions] = useState({ image: null });
+  const [voteSignOptions, setVoteSignOptions] = useState({ image: null });
+  const [roboPetsSignOptions, setRoboPetsSignOptions] = useState({
+    image: null
+  });
+  const [bellyPoolOptions, setBellyPoolOptions] = useState({ image: null });
+  const [scanner1Options, setScanner1Options] = useState({ image: null });
+  const [scanner2Options, setScanner2Options] = useState({ image: null });
+  const [petOwnersOptions, setPetOwnersOptions] = useState({ image: null });
 
   const range = 100;
+  const rangeGun = 20;
   const npc1position = { x: 620, y: 380 };
   const npc2position = { x: 1800, y: 200 };
   const npc3position = { x: 1400, y: 600 };
@@ -138,7 +459,21 @@ function App() {
   const npc7position = { x: 1100, y: 750 };
   const npc8position = { x: 150, y: 540 };
   const npc9position = { x: 1100, y: 1300 };
-  const npc10position = { x: 300, y: 300 };
+  const npc10position = { x: 300, y: 360 };
+  const npc11position = { x: 1850, y: 1150 };
+  const npc12position = { x: 1750, y: 642 };
+  const arrowposition = { x: 1488, y: 576 };
+  const clothingposition = { x: 525, y: 1152 };
+  const robomartposition = { x: 1892, y: 953 };
+  const rechargingposition = { x: 2019, y: 791 };
+  const discoposition = { x: 144, y: 1223 };
+  const teleporterposition = { x: 863, y: 0 };
+  const voteSignposition = { x: 775, y: 865 };
+  const roboPetsSignposition = { x: 666, y: 865 };
+  const bellyPoolposition = { x: 960, y: 510 };
+  const scanner1position = { x: 35, y: 234 };
+  const scanner2position = { x: 250, y: 234 };
+  const petOwnersposition = { x: 1000, y: 900 };
 
   const npc1Ref = useRef();
   const npc2Ref = useRef();
@@ -150,6 +485,20 @@ function App() {
   const npc8Ref = useRef();
   const npc9Ref = useRef();
   const npc10Ref = useRef();
+  const npc11Ref = useRef();
+  const npc12Ref = useRef();
+  const arrowRef = useRef();
+  const clothingRef = useRef();
+  const roboRef = useRef();
+  const rechargingRef = useRef();
+  const discoRef = useRef();
+  const teleporterRef = useRef();
+  const voteSignRef = useRef();
+  const roboPetsSignRef = useRef();
+  const bellyPoolRef = useRef();
+  const scanner1Ref = useRef();
+  const scanner2Ref = useRef();
+  const petOwnersRef = useRef();
 
   const [npc1Direction, setNpc1Direction] = useState({ state: "walkDown" });
   const [npc2Direction, setNpc2Direction] = useState({ state: "walkDown" });
@@ -161,6 +510,25 @@ function App() {
   const [npc8Direction, setNpc8Direction] = useState({ state: "walkLeft" });
   const [npc9Direction, setNpc9Direction] = useState({ state: "walkLeft" });
   const [npc10Direction, setNpc10Direction] = useState({ state: "walkLeft" });
+  const [npc11Direction, setNpc11Direction] = useState({ state: "walkDown" });
+  const [npc12Direction, setNpc12Direction] = useState({ state: "walkLeft" });
+  const [arrowDirection, setArrowDirection] = useState({ state: "arrow" });
+  const [clothingDirection] = useState({ state: "clothing" });
+  const [roboDirection] = useState({ state: "robomart" });
+  const [rechargingDirection] = useState({ state: "recharging" });
+  const [disco] = useState({ state: "discoArea" });
+  const [teleporter] = useState({ state: "teleporter" });
+  const [voteSign] = useState({ state: "voteSign" });
+  const [roboPetsSign] = useState({ state: "voteSign" });
+  const [bellyPool] = useState({ state: "bellyPool" });
+  const [scanner1] = useState({ state: "scanner" });
+  const [scanner2] = useState({ state: "scanner" });
+  const [petOwners] = useState({ state: "petOwners" });
+
+  const sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  };
+  const maxTimeout = 5000;
 
   //NPC1
   useEffect(() => {
@@ -216,11 +584,16 @@ function App() {
   }, [npc1Direction.state]);
 
   useEffect(() => {
+    const random = Math.floor(Math.random() * maxTimeout);
     if (npc1Direction.state === "idleDown") {
-      setNpc1Direction({ state: "walkUp" });
+      sleep(random).then(() => {
+        setNpc1Direction({ state: "walkUp" });
+      });
     }
     if (npc1Direction.state === "idleUp") {
-      setNpc1Direction({ state: "walkDown" });
+      sleep(random).then(() => {
+        setNpc1Direction({ state: "walkDown" });
+      });
     }
   }, [npc1Direction.state]);
 
@@ -276,11 +649,16 @@ function App() {
   }, [npc2Direction.state]);
 
   useEffect(() => {
+    const random = Math.floor(Math.random() * maxTimeout);
     if (npc2Direction.state === "idleDown") {
-      setNpc2Direction({ state: "walkUp" });
+      sleep(random).then(() => {
+        setNpc2Direction({ state: "walkUp" });
+      });
     }
     if (npc2Direction.state === "idleUp") {
-      setNpc2Direction({ state: "walkDown" });
+      sleep(random).then(() => {
+        setNpc2Direction({ state: "walkDown" });
+      });
     }
   }, [npc2Direction.state]);
 
@@ -338,11 +716,16 @@ function App() {
   }, [npc3Direction.state]);
 
   useEffect(() => {
+    const random = Math.floor(Math.random() * maxTimeout);
     if (npc3Direction.state === "idleDown") {
-      setNpc3Direction({ state: "walkUp" });
+      sleep(random).then(() => {
+        setNpc3Direction({ state: "walkUp" });
+      });
     }
     if (npc3Direction.state === "idleUp") {
-      setNpc3Direction({ state: "walkDown" });
+      sleep(random).then(() => {
+        setNpc3Direction({ state: "walkDown" });
+      });
     }
   }, [npc3Direction.state]);
 
@@ -398,11 +781,16 @@ function App() {
   }, [npc4Direction.state]);
 
   useEffect(() => {
+    const random = Math.floor(Math.random() * maxTimeout);
     if (npc4Direction.state === "idleDown") {
-      setNpc4Direction({ state: "walkUp" });
+      sleep(random).then(() => {
+        setNpc4Direction({ state: "walkUp" });
+      });
     }
     if (npc4Direction.state === "idleUp") {
-      setNpc4Direction({ state: "walkDown" });
+      sleep(random).then(() => {
+        setNpc4Direction({ state: "walkDown" });
+      });
     }
   }, [npc4Direction.state]);
 
@@ -458,11 +846,16 @@ function App() {
   }, [npc5Direction.state]);
 
   useEffect(() => {
+    const random = Math.floor(Math.random() * maxTimeout);
     if (npc5Direction.state === "idleDown") {
-      setNpc5Direction({ state: "walkUp" });
+      sleep(random).then(() => {
+        setNpc5Direction({ state: "walkUp" });
+      });
     }
     if (npc5Direction.state === "idleUp") {
-      setNpc5Direction({ state: "walkDown" });
+      sleep(random).then(() => {
+        setNpc5Direction({ state: "walkDown" });
+      });
     }
   }, [npc5Direction.state]);
 
@@ -518,11 +911,16 @@ function App() {
   }, [npc6Direction.state]);
 
   useEffect(() => {
+    const random = Math.floor(Math.random() * maxTimeout);
     if (npc6Direction.state === "idleLeft") {
-      setNpc6Direction({ state: "walkRight" });
+      sleep(random).then(() => {
+        setNpc6Direction({ state: "walkRight" });
+      });
     }
     if (npc6Direction.state === "idleRight") {
-      setNpc6Direction({ state: "walkLeft" });
+      sleep(random).then(() => {
+        setNpc6Direction({ state: "walkLeft" });
+      });
     }
   }, [npc6Direction.state]);
 
@@ -578,11 +976,16 @@ function App() {
   }, [npc7Direction.state]);
 
   useEffect(() => {
+    const random = Math.floor(Math.random() * maxTimeout);
     if (npc7Direction.state === "idleLeft") {
-      setNpc7Direction({ state: "walkRight" });
+      sleep(random).then(() => {
+        setNpc7Direction({ state: "walkRight" });
+      });
     }
     if (npc7Direction.state === "idleRight") {
-      setNpc7Direction({ state: "walkLeft" });
+      sleep(random).then(() => {
+        setNpc7Direction({ state: "walkLeft" });
+      });
     }
   }, [npc7Direction.state]);
 
@@ -638,11 +1041,16 @@ function App() {
   }, [npc8Direction.state]);
 
   useEffect(() => {
+    const random = Math.floor(Math.random() * maxTimeout);
     if (npc8Direction.state === "idleLeft") {
-      setNpc8Direction({ state: "walkRight" });
+      sleep(random).then(() => {
+        setNpc8Direction({ state: "walkRight" });
+      });
     }
     if (npc8Direction.state === "idleRight") {
-      setNpc8Direction({ state: "walkLeft" });
+      sleep(random).then(() => {
+        setNpc8Direction({ state: "walkLeft" });
+      });
     }
   }, [npc8Direction.state]);
 
@@ -698,11 +1106,16 @@ function App() {
   }, [npc9Direction.state]);
 
   useEffect(() => {
+    const random = Math.floor(Math.random() * maxTimeout);
     if (npc9Direction.state === "idleLeft") {
-      setNpc9Direction({ state: "walkRight" });
+      sleep(random).then(() => {
+        setNpc9Direction({ state: "walkRight" });
+      });
     }
     if (npc9Direction.state === "idleRight") {
-      setNpc9Direction({ state: "walkLeft" });
+      sleep(random).then(() => {
+        setNpc9Direction({ state: "walkLeft" });
+      });
     }
   }, [npc9Direction.state]);
 
@@ -758,13 +1171,283 @@ function App() {
   }, [npc10Direction.state]);
 
   useEffect(() => {
+    const random = Math.floor(Math.random() * maxTimeout);
     if (npc10Direction.state === "idleLeft") {
-      setNpc10Direction({ state: "walkRight" });
+      sleep(random).then(() => {
+        setNpc10Direction({ state: "walkRight" });
+      });
     }
     if (npc10Direction.state === "idleRight") {
-      setNpc10Direction({ state: "walkLeft" });
+      sleep(random).then(() => {
+        setNpc10Direction({ state: "walkLeft" });
+      });
     }
   }, [npc10Direction.state]);
+
+  //NPC11
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/gunShopOwner.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setNpc11Options({ image: image });
+      npc11Ref.current.start();
+    };
+  }, [npc11Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 100;
+      if (npc11Direction.state !== "walkDown") {
+        return;
+      }
+
+      npc11Ref.current.y() > ((npc11position.y + rangeGun) * maxWidth) / width
+        ? setNpc11Direction({ state: "idleDown" })
+        : npc11Ref.current.y(
+            ((npc11position.y - rangeGun) * maxWidth) / width +
+              frame.time / period
+          );
+    }, npc11Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc11Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 100;
+      if (npc11Direction.state !== "walkUp") {
+        return;
+      }
+
+      npc11Ref.current.y() < ((npc11position.y - rangeGun) * maxWidth) / width
+        ? setNpc11Direction({ state: "idleUp" })
+        : npc11Ref.current.y(
+            ((npc11position.y + rangeGun) * maxWidth) / width -
+              frame.time / period
+          );
+    }, npc11Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc11Direction.state]);
+
+  useEffect(() => {
+    const random = Math.floor(Math.random() * maxTimeout);
+    if (npc11Direction.state === "idleDown") {
+      sleep(random).then(() => {
+        setNpc11Direction({ state: "walkUp" });
+      });
+    }
+    if (npc11Direction.state === "idleUp") {
+      sleep(random).then(() => {
+        setNpc11Direction({ state: "walkDown" });
+      });
+    }
+  }, [npc11Direction.state]);
+
+  //NPC12
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/npc12.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setNpc12Options({ image: image });
+      npc12Ref.current.start();
+    };
+  }, [npc12Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc12Direction.state !== "walkRight") {
+        return;
+      }
+
+      npc12Ref.current.x() > ((npc12position.x + range) * maxWidth) / width
+        ? setNpc12Direction({ state: "idleRight" })
+        : npc12Ref.current.x(
+            ((npc12position.x - range) * maxWidth) / width + frame.time / period
+          );
+    }, npc12Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc12Direction.state]);
+
+  useEffect(() => {
+    var anim = new Konva.Animation((frame) => {
+      const period = 30;
+      if (npc12Direction.state !== "walkLeft") {
+        return;
+      }
+
+      npc12Ref.current.x() < ((npc12position.x - range) * maxWidth) / width
+        ? setNpc12Direction({ state: "idleLeft" })
+        : npc12Ref.current.x(
+            ((npc12position.x + range) * maxWidth) / width - frame.time / period
+          );
+    }, npc12Ref.current.getLayer());
+
+    anim.start();
+    return () => {
+      anim.stop();
+    };
+  }, [npc12Direction.state]);
+
+  useEffect(() => {
+    const random = Math.floor(Math.random() * maxTimeout);
+    if (npc12Direction.state === "idleLeft") {
+      sleep(random).then(() => {
+        setNpc12Direction({ state: "walkRight" });
+      });
+    }
+    if (npc12Direction.state === "idleRight") {
+      sleep(random).then(() => {
+        setNpc12Direction({ state: "walkLeft" });
+      });
+    }
+  }, [npc12Direction.state]);
+
+  //Arrow sign
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/arrowSign.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setArrowOptions({ image: image });
+      arrowRef.current.start();
+    };
+  }, [arrowDirection.state]);
+
+  //Clothing sign
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/clothingSign.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setClothingOptions({ image: image });
+      clothingRef.current.start();
+    };
+  }, [clothingDirection.state]);
+
+  //Robomart sign
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/robomartSign.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setRoboOptions({ image: image });
+      roboRef.current.start();
+    };
+  }, [roboDirection.state]);
+
+  //Recharging
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/recharging.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setRechargingOptions({ image: image });
+      rechargingRef.current.start();
+    };
+  }, [rechargingDirection.state]);
+
+  //Disco
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/discoArea.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setDiscoOptions({ image: image });
+      discoRef.current.start();
+    };
+  }, [disco.state]);
+
+  //Teleporter
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/teleporter.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setTeleporterOptions({ image: image });
+      teleporterRef.current.start();
+    };
+  }, [teleporter.state]);
+
+  //Vote Sign
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/voteSign.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setVoteSignOptions({ image: image });
+      voteSignRef.current.start();
+    };
+  }, [voteSign.state]);
+
+  //RoboPets Sign
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/roboPetsSign.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setRoboPetsSignOptions({ image: image });
+      roboPetsSignRef.current.start();
+    };
+  }, [roboPetsSign.state]);
+
+  //Belly Pool
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/bellyPool.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setBellyPoolOptions({ image: image });
+      bellyPoolRef.current.start();
+    };
+  }, [bellyPool.state]);
+
+  //Scanner 1
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/scanner1.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setScanner1Options({ image: image });
+      scanner1Ref.current.start();
+    };
+  }, [scanner1.state]);
+
+  //Scanner 2
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/scanner2.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setScanner2Options({ image: image });
+      scanner2Ref.current.start();
+    };
+  }, [scanner2.state]);
+
+  //Pet Owners
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = "/config/images/petOwners.png";
+    image.onload = () => {
+      // set image only when it is loaded
+      setPetOwnersOptions({ image: image });
+      petOwnersRef.current.start();
+    };
+  }, [petOwners.state]);
+
   //==========================================================================
 
   const [isTooltipVisible, setTooltipVisible] = React.useState(false);
@@ -1201,6 +1884,318 @@ function App() {
     >
       <Layer>
         <Spaceship />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={bellyPoolRef}
+          image={bellyPoolOptions.image}
+          animation={bellyPool.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(bellyPoolposition.x * maxWidth) / width}
+          y={(bellyPoolposition.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={scanner1Ref}
+          image={scanner1Options.image}
+          animation={scanner1.state}
+          frameRate={4}
+          frameIndex={0}
+          animations={animations}
+          x={(scanner1position.x * maxWidth) / width}
+          y={(scanner1position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={scanner2Ref}
+          image={scanner2Options.image}
+          animation={scanner2.state}
+          frameRate={4}
+          frameIndex={0}
+          animations={animations}
+          x={(scanner2position.x * maxWidth) / width}
+          y={(scanner2position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc1Ref}
+          image={npc1Options.image}
+          animation={npc1Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc1position.x * maxWidth) / width}
+          y={(npc1position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc2Ref}
+          image={npc2Options.image}
+          animation={npc2Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc2position.x * maxWidth) / width}
+          y={(npc2position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc3Ref}
+          image={npc3Options.image}
+          animation={npc3Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc3position.x * maxWidth) / width}
+          y={(npc3position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc4Ref}
+          image={npc4Options.image}
+          animation={npc4Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc4position.x * maxWidth) / width}
+          y={(npc4position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc5Ref}
+          image={npc5Options.image}
+          animation={npc5Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc5position.x * maxWidth) / width}
+          y={(npc5position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc6Ref}
+          image={npc6Options.image}
+          animation={npc6Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc6position.x * maxWidth) / width}
+          y={(npc6position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc7Ref}
+          image={npc7Options.image}
+          animation={npc7Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc7position.x * maxWidth) / width}
+          y={(npc7position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc8Ref}
+          image={npc8Options.image}
+          animation={npc8Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc8position.x * maxWidth) / width}
+          y={(npc8position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc9Ref}
+          image={npc9Options.image}
+          animation={npc9Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc9position.x * maxWidth) / width}
+          y={(npc9position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc10Ref}
+          image={npc10Options.image}
+          animation={npc10Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc10position.x * maxWidth) / width}
+          y={(npc10position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc11Ref}
+          image={npc11Options.image}
+          animation={npc11Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc11position.x * maxWidth) / width}
+          y={(npc11position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={npc12Ref}
+          image={npc12Options.image}
+          animation={npc12Direction.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(npc12position.x * maxWidth) / width}
+          y={(npc12position.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={arrowRef}
+          image={arrowOptions.image}
+          animation={arrowDirection.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(arrowposition.x * maxWidth) / width}
+          y={(arrowposition.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={clothingRef}
+          image={clothingOptions.image}
+          animation={clothingDirection.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(clothingposition.x * maxWidth) / width}
+          y={(clothingposition.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={roboRef}
+          image={roboOptions.image}
+          animation={roboDirection.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(robomartposition.x * maxWidth) / width}
+          y={(robomartposition.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={rechargingRef}
+          image={rechargingOptions.image}
+          animation={rechargingDirection.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(rechargingposition.x * maxWidth) / width}
+          y={(rechargingposition.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={discoRef}
+          image={discoOptions.image}
+          animation={disco.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(discoposition.x * maxWidth) / width}
+          y={(discoposition.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={teleporterRef}
+          image={teleporterOptions.image}
+          animation={teleporter.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(teleporterposition.x * maxWidth) / width}
+          y={(teleporterposition.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={petOwnersRef}
+          image={petOwnersOptions.image}
+          animation={petOwners.state}
+          frameRate={8}
+          frameIndex={0}
+          animations={animations}
+          x={(petOwnersposition.x * maxWidth) / width}
+          y={(petOwnersposition.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={voteSignRef}
+          image={voteSignOptions.image}
+          animation={voteSign.state}
+          frameRate={4}
+          frameIndex={0}
+          animations={animations}
+          x={(voteSignposition.x * maxWidth) / width}
+          y={(voteSignposition.y * maxWidth) / width}
+        />
+        <Sprite
+          scaleX={maxWidth / width}
+          scaleY={maxWidth / width}
+          height={1}
+          ref={roboPetsSignRef}
+          image={roboPetsSignOptions.image}
+          animation={roboPetsSign.state}
+          frameRate={4}
+          frameIndex={0}
+          animations={animations}
+          x={(roboPetsSignposition.x * maxWidth) / width}
+          y={(roboPetsSignposition.y * maxWidth) / width}
+        />
       </Layer>
       <Layer>
         <Image
@@ -1395,136 +2390,6 @@ function App() {
           y={state.cursor.y - 15}
           text={tooltipText}
           isVisible={isTooltipVisible}
-        />
-        <Sprite
-          scaleX={maxWidth / width}
-          scaleY={maxWidth / width}
-          height={1}
-          ref={npc1Ref}
-          image={npc1Options.image}
-          animation={npc1Direction.state}
-          frameRate={8}
-          frameIndex={0}
-          animations={animations}
-          x={(npc1position.x * maxWidth) / width}
-          y={(npc1position.y * maxWidth) / width}
-        />
-        <Sprite
-          scaleX={maxWidth / width}
-          scaleY={maxWidth / width}
-          height={1}
-          ref={npc2Ref}
-          image={npc2Options.image}
-          animation={npc2Direction.state}
-          frameRate={8}
-          frameIndex={0}
-          animations={animations}
-          x={(npc2position.x * maxWidth) / width}
-          y={(npc2position.y * maxWidth) / width}
-        />
-        <Sprite
-          scaleX={maxWidth / width}
-          scaleY={maxWidth / width}
-          height={1}
-          ref={npc3Ref}
-          image={npc3Options.image}
-          animation={npc3Direction.state}
-          frameRate={8}
-          frameIndex={0}
-          animations={animations}
-          x={(npc3position.x * maxWidth) / width}
-          y={(npc3position.y * maxWidth) / width}
-        />
-        <Sprite
-          scaleX={maxWidth / width}
-          scaleY={maxWidth / width}
-          height={1}
-          ref={npc4Ref}
-          image={npc4Options.image}
-          animation={npc4Direction.state}
-          frameRate={8}
-          frameIndex={0}
-          animations={animations}
-          x={(npc4position.x * maxWidth) / width}
-          y={(npc4position.y * maxWidth) / width}
-        />
-        <Sprite
-          scaleX={maxWidth / width}
-          scaleY={maxWidth / width}
-          height={1}
-          ref={npc5Ref}
-          image={npc5Options.image}
-          animation={npc5Direction.state}
-          frameRate={8}
-          frameIndex={0}
-          animations={animations}
-          x={(npc5position.x * maxWidth) / width}
-          y={(npc5position.y * maxWidth) / width}
-        />
-        <Sprite
-          scaleX={maxWidth / width}
-          scaleY={maxWidth / width}
-          height={1}
-          ref={npc6Ref}
-          image={npc6Options.image}
-          animation={npc6Direction.state}
-          frameRate={8}
-          frameIndex={0}
-          animations={animations}
-          x={(npc6position.x * maxWidth) / width}
-          y={(npc6position.y * maxWidth) / width}
-        />
-        <Sprite
-          scaleX={maxWidth / width}
-          scaleY={maxWidth / width}
-          height={1}
-          ref={npc7Ref}
-          image={npc7Options.image}
-          animation={npc7Direction.state}
-          frameRate={8}
-          frameIndex={0}
-          animations={animations}
-          x={(npc7position.x * maxWidth) / width}
-          y={(npc7position.y * maxWidth) / width}
-        />
-        <Sprite
-          scaleX={maxWidth / width}
-          scaleY={maxWidth / width}
-          height={1}
-          ref={npc8Ref}
-          image={npc8Options.image}
-          animation={npc8Direction.state}
-          frameRate={8}
-          frameIndex={0}
-          animations={animations}
-          x={(npc8position.x * maxWidth) / width}
-          y={(npc8position.y * maxWidth) / width}
-        />
-        <Sprite
-          scaleX={maxWidth / width}
-          scaleY={maxWidth / width}
-          height={1}
-          ref={npc9Ref}
-          image={npc9Options.image}
-          animation={npc9Direction.state}
-          frameRate={8}
-          frameIndex={0}
-          animations={animations}
-          x={(npc9position.x * maxWidth) / width}
-          y={(npc9position.y * maxWidth) / width}
-        />
-        <Sprite
-          scaleX={maxWidth / width}
-          scaleY={maxWidth / width}
-          height={1}
-          ref={npc10Ref}
-          image={npc10Options.image}
-          animation={npc10Direction.state}
-          frameRate={8}
-          frameIndex={0}
-          animations={animations}
-          x={(npc10position.x * maxWidth) / width}
-          y={(npc10position.y * maxWidth) / width}
         />
       </Layer>
     </Stage>
