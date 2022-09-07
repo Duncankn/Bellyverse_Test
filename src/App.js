@@ -51,6 +51,7 @@ function App() {
   const [mintDialog, setMintDialog] = useState(false);
   const [dialogAnimeStarted, setDialogAnimeStarted] = useState(false);
   const [dialogAnimeEnded, setDialogAnimeEnded] = useState(false);
+  const [bellyTube] = useImage("/config/images/bellyTube.png");
   const [logo] = useImage("/config/images/polygon.svg");
   const [music] = useImage("/config/images/music-icon.png");
   const [noMusic] = useImage("/config/images/music-off-icon.png");
@@ -322,36 +323,36 @@ function App() {
       0, // frame 1
       0,
       144,
-      96, 
-      144,// frame 2
+      96,
+      144, // frame 2
       0,
       144,
       96,
-      288,// frame 3
+      288, // frame 3
       0,
       144,
       96,
-      432,// frame 4
+      432, // frame 4
       0,
       144,
       96,
-      576,// frame 5
+      576, // frame 5
       0,
       144,
       96,
-      720,// frame 6
+      720, // frame 6
       0,
       144,
       96,
-      864,// frame 7
+      864, // frame 7
       0,
       144,
       96,
-      1008,// frame 8
+      1008, // frame 8
       0,
       144,
       96,
-      1152,// frame 9
+      1152, // frame 9
       0,
       144,
       96
@@ -1503,10 +1504,15 @@ function App() {
   };
 
   const mintBox = {
-    x: 200,
-    y: 750,
-    width: maxWidth * 0.8,
-    height: 10
+    x: 50,
+    y: 400,
+    width: maxWidth * 0.95,
+    height: 1.5
+  };
+
+  const tube = {
+    width: 480,
+    height: 480
   };
 
   const discord = {
@@ -1719,29 +1725,42 @@ function App() {
     x: (mintBox.x * maxWidth) / width,
     y: (mintBox.y * maxWidth) / width,
     width: mintBox.width,
-    height: (mintBox.height * maxWidth) / width
+    height: mintBox.height
+  };
+
+  const aTube = {
+    width: (tube.width * maxWidth) / width,
+    height: (tube.height * maxWidth) / width,
+    x: aMintBox.x + aMintBox.width / 2 - (tube.width * maxWidth) / width / 2,
+    y: ((mintBox.y + 100) * maxWidth) / width
   };
 
   const aMintText = {
-    x: (mintBox.x * maxWidth) / width + mintBox.width - 100,
-    y: (mintBox.y * maxWidth) / width + aMintBox.height * 20 - 30,
+    x: (mintBox.x * maxWidth) / width + mintBox.width - 150,
+    y: aTube.y + aTube.height,
     width: mintBox.width,
     height: (mintBox.height * maxWidth) / width
   };
 
   const aMintQty = {
-    x: (mintBox.x * maxWidth) / width + aMintBox.width / 2,
-    y: (mintBox.y * maxWidth) / width + (aMintBox.height * 20) / 2
+    x: aMintBox.x + aMintBox.width / 2 - 15,
+    y: aTube.y + aTube.height / 2
   };
 
   const aMintMinus = {
-    x: (mintBox.x * maxWidth) / width + aMintBox.width / 2 - 50,
-    y: (mintBox.y * maxWidth) / width + (aMintBox.height * 20) / 2
+    x:
+      (mintBox.x * maxWidth) / width +
+      aMintBox.width / 2 -
+      (tube.width * maxWidth) / width / 2 - 15,
+    y: aTube.y + aTube.height / 2
   };
 
   const aMintPlus = {
-    x: (mintBox.x * maxWidth) / width + aMintBox.width / 2 + 50,
-    y: (mintBox.y * maxWidth) / width + (aMintBox.height * 20) / 2
+    x:
+      (mintBox.x * maxWidth) / width +
+      aMintBox.width / 2 +
+      (tube.width * maxWidth) / width / 2 - 15,
+    y: aTube.y + aTube.height / 2
   };
 
   const aMintCross = {
@@ -1863,7 +1882,10 @@ function App() {
     }
     var period = 300;
     var anim = new Konva.Animation((frame) => {
-      var scale = frame.time / period <= 1 ? 20 * (frame.time / period) : 20;
+      var scale =
+        frame.time / period <= 1
+          ? aTube.height * (frame.time / period)
+          : aTube.height;
       dialogRef.current.scale({ y: scale });
     }, dialogRef.current.getLayer());
 
@@ -2268,6 +2290,7 @@ function App() {
               height={aMintBox.height}
               x={aMintBox.x}
               y={aMintBox.y}
+              cornerRadius={50}
               fill="black"
               opacity={0.7}
             />
@@ -2275,7 +2298,7 @@ function App() {
               x={aMintBox.x}
               y={aMintBox.y}
               text="Mint Belly NFT"
-              fontSize={18}
+              fontSize={28}
               fontStyle="bold"
               fontFamily="Press Start 2P"
               fill="white"
@@ -2283,16 +2306,24 @@ function App() {
               padding={5}
               align="left"
             />
+            <Image
+              className="bellyTube"
+              width={aTube.width}
+              height={aTube.height}
+              x={aTube.x}
+              y={aTube.y}
+              image={bellyTube}
+            />
             <Text
               x={aMintMinus.x}
               y={aMintMinus.y}
               text="-"
-              fontSize={18}
+              fontSize={36}
               fontFamily="Press Start 2P"
               fill={isMintMinusHover ? "red" : "white"}
               padding={5}
               verticalAlign="middle"
-              align="center"
+              align="right"
               onClick={decrementMintAmount}
               onTap={decrementMintAmount}
               onMouseEnter={handleMintMinusEnter}
@@ -2302,23 +2333,23 @@ function App() {
               x={aMintQty.x}
               y={aMintQty.y}
               text={mintAmount}
-              fontSize={18}
+              fontSize={36}
               fontFamily="Press Start 2P"
               fill="white"
               padding={5}
               verticalAlign="middle"
-              align="center"
+              align="right"
             />
             <Text
-              x={aMintPlus.x}
+              x={aMintPlus.x - 6}
               y={aMintPlus.y}
               text="+"
-              fontSize={18}
+              fontSize={36}
               fontFamily="Press Start 2P"
               fill={isMintPlusHover ? "red" : "white"}
               padding={5}
               verticalAlign="middle"
-              align="center"
+              align="right"
               onClick={incrementMintAmount}
               onTap={incrementMintAmount}
               onMouseEnter={handleMintPlusEnter}
@@ -2328,8 +2359,9 @@ function App() {
               x={aMintText.x}
               y={aMintText.y}
               text="Mint"
-              fontSize={18}
+              fontSize={30}
               fontFamily="Press Start 2P"
+              font
               fill={isMintTextHover ? "red" : "white"}
               padding={5}
               verticalAlign="bottom"
