@@ -1,16 +1,6 @@
 import Konva from "konva";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Circle,
-  Group,
-  Image,
-  Layer,
-  Line,
-  Rect,
-  Sprite,
-  Stage,
-  Text
-} from "react-konva";
+import { Circle, Group, Image, Layer, Line, Rect, Sprite, Stage, Text } from "react-konva";
 import { useDispatch, useSelector } from "react-redux";
 import useImage from "use-image";
 import Tooltip from "./components/tooltip";
@@ -95,24 +85,7 @@ function App() {
     idleDown: [0, 0, 96, 96],
     idleUp: [0, 96, 96, 96],
     walkLeft: [0, 0, 96, 96, 96, 0, 96, 96, 194, 0, 96, 96, 290, 0, 96, 96],
-    walkRight: [
-      0,
-      96,
-      96,
-      96,
-      96,
-      96,
-      96,
-      96,
-      194,
-      96,
-      96,
-      96,
-      290,
-      96,
-      96,
-      96
-    ],
+    walkRight: [0, 96, 96, 96, 96, 96, 96, 96, 194, 96, 96, 96, 290, 96, 96, 96],
     idleLeft: [290, 0, 96, 96],
     idleRight: [0, 96, 96, 96],
     arrow: [
