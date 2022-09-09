@@ -7,6 +7,7 @@ html {
   height: 100%;
   margin: 0;
   font-family: "Press Start 2P", cursive;
+  background-color: black;
 }
 
 .screen--container {
@@ -21,9 +22,35 @@ html {
 
 nav {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  height: 90;
-  padding: 30px 25px;
+  height: 40;
+  padding: 5px 5px;
+  color: white;
+}
+
+.nav--menu {
+  display: flex;
+  margin: 10px;
+  align-items: center;
+  color: white;
+}
+
+a {
+  text-decoration: none;
+  color: white
+}
+
+a:hover {
+  text-decoration: none;
+  color: wheat
+}
+
+
+.nav--menu li {
+  display: flex;
+  margin-left: 20px;
+  color: white;
 }
 
 .nav--logo {
@@ -32,18 +59,29 @@ nav {
   margin-left: 10px;
 }
 
+.nav--acc-info {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+  padding-right: 10px;
+  color: wheat;
+}
+
 .nav--button {
-  height: 50px;
+  height: 40px;
   width: 180px;
   font-size: 24px;
-  color: #19373f;
+  color: wheat;
   font-weight: 700;
-  border-color: #19373f;
+  background-color: black;
+  border-color: wheat;
   border-radius: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .nav--logo-text {
-  color: #19373f;
+  c
   font-weight: 700;
 }
 
@@ -74,7 +112,7 @@ nav {
 
 .hero--text {
   margin: 10px 48px;
-  color: var(--secondary-text);
+  color: wheat;
 }
 
 .mint--container {
