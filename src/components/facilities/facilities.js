@@ -47,24 +47,21 @@ export default function Facilities() {
     ]
   };
 
-  const mintBox = {
-    x: 50,
-    y: 400,
-    width: maxWidth * 0.95,
-    height: 1.5
+  const tube = {
+    width: 1536,
+    height: 744
   };
 
-  const tube = {
-    width: 480,
-    height: 480
+  const mintBox = {
+    width: tube.width,
+    height: tube.height
   };
 
   const discord = {
-    x: 190,
-    y: 870,
-    width: 190,
-    height: 130,
-    vertice: [0, 920, 190, 920, 190, 960, 125, 960, 36, 1050, 0, 1050]
+    x: 0,
+    y: 910,
+    width: 380,
+    height: 230
   };
 
   const twitter = {

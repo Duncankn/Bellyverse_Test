@@ -30,22 +30,26 @@ nav {
 }
 
 .nav--menu {
+  padding-top: 10px;
   display: flex;
   margin: 10px;
-  align-items: center;
+  color: white;
+}
+
+.app--name {
+  padding-top: 10px;
   color: white;
 }
 
 a {
   text-decoration: none;
-  color: white
+  color: white;
 }
 
 a:hover {
   text-decoration: none;
-  color: wheat
+  color: wheat;
 }
-
 
 .nav--menu li {
   display: flex;
@@ -81,8 +85,8 @@ a:hover {
 }
 
 .nav--logo-text {
-  c
   font-weight: 700;
+  color: #75a743;
 }
 
 .main-content {
@@ -178,4 +182,23 @@ a:hover {
 .myCollection--title {
   color: var(--secondary-text);
   margin: 25px 50px;
+}
+
+.collection--switch {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+.switch--label {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.switch {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+  padding-right: 10px;
 }

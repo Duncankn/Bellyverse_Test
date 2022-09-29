@@ -66,7 +66,7 @@ export default function Navbar() {
       <nav>
         {/*<img className="nav--logo" src="/config/images/logo.png" />*/}
         <img src={"/logo192.png"} height="50px" alt="" />
-        <h1>BellyVerse</h1>
+        <h1 className="app--name">BellyVerse</h1>
         <ul className="nav--menu">
           <li>
             <Link to="/">Spaceship</Link>

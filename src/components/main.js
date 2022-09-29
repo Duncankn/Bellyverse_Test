@@ -27,6 +27,7 @@ const maxWidth = window.innerWidth * 0.98;
 const width = 2160;
 const height = 1440;
 const ratio = height / width;
+const scale = maxWidth / width;
 
 const Spaceship = () => {
   const [image] = useImage("/config/images/spaceshipBelly.png");
@@ -57,7 +58,7 @@ export default function Main() {
   const [logo] = useImage("/config/images/polygon.svg");
   const [music] = useImage("/config/images/music-icon.png");
   const [noMusic] = useImage("/config/images/music-off-icon.png");
-  const bgmUrl = "/config/06 Kowloon.mp3";
+  const bgmUrl = "/config/07 420.mp3";
   //const navigate = useNavigate();
   const [CONFIG, SET_CONFIG] = useState({
     CONTRACT_ADDRESS: "",
@@ -1566,6 +1567,7 @@ export default function Main() {
   const [isMintTextHover, setMintTextIsHover] = React.useState(false);
   const [isMintMinusHover, setMintMinusIsHover] = React.useState(false);
   const [isMintPlusHover, setMintPlusIsHover] = React.useState(false);
+  const [isMintCrossHover, setMintCrossIsHover] = React.useState(false);
   const [isBgmHover, setBgmIsHover] = React.useState(false);
 
   const handleMouseMove = (e) => {
@@ -1622,7 +1624,7 @@ export default function Main() {
 
   const handleLabEnter = (e) => {
     setLabIsHover(true);
-    setTooltipText("Belly Lab");
+    setTooltipText("Belly Labs");
     setTooltipVisible(true);
   };
 
@@ -1674,6 +1676,14 @@ export default function Main() {
     setMintPlusIsHover(false);
   };
 
+  const handleMintCrossEnter = (e) => {
+    setMintCrossIsHover(true);
+  };
+
+  const handleMintCrossLeave = (e) => {
+    setMintCrossIsHover(false);
+  };
+
   const handleDiscordEnter = (e) => {
     setDiscordIsHover(true);
     setTooltipText("Discord");
@@ -1701,10 +1711,7 @@ export default function Main() {
   };
 
   const handleBarClick = (e) => {
-    window.open(
-      "https://twitter.com/BellyCustomNFT?s=20&t=y05Mv05oV5A8Fhg9yaBcOA",
-      "_blank"
-    );
+    window.open("https://twitter.com/BellyVerse", "_blank");
   };
 
   const handleBgmEnter = (e) => {
@@ -1732,7 +1739,7 @@ export default function Main() {
   const lab = facilities().lab;
   const discord = facilities().discord;
   const twitter = facilities().twitter;
-  const mintBox = facilities().mintBox;
+
   const tube = facilities().tube;
 
   const aMarket = {
@@ -1769,9 +1776,8 @@ export default function Main() {
   const aDiscord = {
     x: (discord.x * maxWidth) / width,
     y: (discord.y * maxWidth) / width,
-    vertice: discord.vertice.map((data) => {
-      return (data * maxWidth) / width;
-    })
+    width: discord.width * scale,
+    height: discord.height * scale
   };
 
   const aTwitter = {
@@ -1781,53 +1787,44 @@ export default function Main() {
     height: (twitter.height * maxWidth) / width
   };
   ///////Minting dialog
-  const aMintBox = {
-    x: (mintBox.x * maxWidth) / width,
-    y: (mintBox.y * maxWidth) / width,
-    width: mintBox.width,
-    height: mintBox.height
-  };
 
   const aTube = {
     width: (tube.width * maxWidth) / width,
     height: (tube.height * maxWidth) / width,
-    x: aMintBox.x + aMintBox.width / 2 - (tube.width * maxWidth) / width / 2,
-    y: ((mintBox.y + 100) * maxWidth) / width
+    x: maxWidth / 2 - (tube.width * maxWidth) / width / 2,
+    y: 200 * scale
   };
 
-  const aMintText = {
-    x: (mintBox.x * maxWidth) / width + mintBox.width - 150,
-    y: aTube.y + aTube.height,
-    width: mintBox.width,
-    height: (mintBox.height * maxWidth) / width
+  const aMintBox = {
+    width: maxWidth,
+    height: maxWidth / ratio,
+    x: 0,
+    y: 0
   };
 
   const aMintQty = {
-    x: aMintBox.x + aMintBox.width / 2 - 15,
-    y: aTube.y + aTube.height / 2
+    x: aMintBox.x + aMintBox.width / 2 - 20,
+    y: aTube.y + aTube.height / 3
   };
 
   const aMintMinus = {
-    x:
-      (mintBox.x * maxWidth) / width +
-      aMintBox.width / 2 -
-      (tube.width * maxWidth) / width / 2 -
-      15,
-    y: aTube.y + aTube.height / 2
+    x: aMintBox.x + aMintBox.width / 2 - 200 * scale - 16,
+    y: aTube.y + aTube.height / 3
   };
 
   const aMintPlus = {
-    x:
-      (mintBox.x * maxWidth) / width +
-      aMintBox.width / 2 +
-      (tube.width * maxWidth) / width / 2 -
-      15,
-    y: aTube.y + aTube.height / 2
+    x: aMintBox.x + aMintBox.width / 2 + 200 * scale - 15,
+    y: aTube.y + aTube.height / 3
+  };
+
+  const aMintText = {
+    x: aMintPlus.x - 60,
+    y: aMintPlus.y + 100 * scale
   };
 
   const aMintCross = {
-    x: (mintBox.x * maxWidth) / width + mintBox.width,
-    y: (mintBox.y * maxWidth) / width + aMintBox.height
+    x: aMintBox.x + aMintBox.width,
+    y: aMintBox.y
   };
 
   //================================================
@@ -1875,8 +1872,8 @@ export default function Main() {
 
   const incrementMintAmount = () => {
     let newMintAmount = mintAmount + 1;
-    if (newMintAmount > 10) {
-      newMintAmount = 10;
+    if (newMintAmount > 9) {
+      newMintAmount = 9;
     }
     setMintAmount(newMintAmount);
   };
@@ -1932,28 +1929,6 @@ export default function Main() {
     anim.start();
   }, [isWalletConnected]);*/
   }
-
-  useEffect(() => {
-    if (!mintDialog) {
-      return;
-    }
-    var period = 300;
-    var anim = new Konva.Animation((frame) => {
-      var scale =
-        frame.time / period <= 1
-          ? aTube.height * (frame.time / period)
-          : aTube.height;
-      dialogRef.current.scale({ y: scale });
-    }, dialogRef.current.getLayer());
-
-    anim.start();
-    setDialogAnimeStarted(true);
-
-    return () => {
-      anim.stop();
-      setDialogAnimeEnded(true);
-    };
-  }, [mintDialog]);
 
   return (
     <Stage
@@ -2328,7 +2303,6 @@ export default function Main() {
           opacity={isGalleryHover ? 0.5 : 0}
           onMouseEnter={handleGalleryEnter}
           onMouseLeave={handleGalleryLeave}
-
         />
 
         {/*isWalletConnected && (
@@ -2351,121 +2325,11 @@ export default function Main() {
           onClick={handleLabClick}
           onTap={handleLabClick}
         />
-        {mintDialog && (
-          <Group>
-            <Rect
-              ref={dialogRef}
-              width={aMintBox.width}
-              height={aMintBox.height}
-              x={aMintBox.x}
-              y={aMintBox.y}
-              cornerRadius={50}
-              fill="black"
-              opacity={0.7}
-            />
-            <Text
-              x={aMintBox.x}
-              y={aMintBox.y}
-              text="Mint Belly NFT"
-              fontSize={28}
-              fontStyle="bold"
-              fontFamily="Press Start 2P"
-              fill="white"
-              width={aMintBox.width}
-              padding={5}
-              align="left"
-            />
-            <Image
-              className="bellyTube"
-              width={aTube.width}
-              height={aTube.height}
-              x={aTube.x}
-              y={aTube.y}
-              image={bellyTube}
-            />
-            <Text
-              x={aMintMinus.x}
-              y={aMintMinus.y}
-              text="-"
-              fontSize={36}
-              fontFamily="Press Start 2P"
-              fill={isMintMinusHover ? "red" : "white"}
-              padding={5}
-              verticalAlign="middle"
-              align="right"
-              onClick={decrementMintAmount}
-              onTap={decrementMintAmount}
-              onMouseEnter={handleMintMinusEnter}
-              onMouseLeave={handleMintMinusLeave}
-            />
-            <Text
-              x={aMintQty.x}
-              y={aMintQty.y}
-              text={mintAmount}
-              fontSize={36}
-              fontFamily="Press Start 2P"
-              fill="white"
-              padding={5}
-              verticalAlign="middle"
-              align="right"
-            />
-            <Text
-              x={aMintPlus.x - 6}
-              y={aMintPlus.y}
-              text="+"
-              fontSize={36}
-              fontFamily="Press Start 2P"
-              fill={isMintPlusHover ? "red" : "white"}
-              padding={5}
-              verticalAlign="middle"
-              align="right"
-              onClick={incrementMintAmount}
-              onTap={incrementMintAmount}
-              onMouseEnter={handleMintPlusEnter}
-              onMouseLeave={handleMintPlusLeave}
-            />
-            <Text
-              x={aMintText.x}
-              y={aMintText.y}
-              text="Mint"
-              fontSize={30}
-              fontFamily="Press Start 2P"
-              font
-              fill={isMintTextHover ? "red" : "white"}
-              padding={5}
-              verticalAlign="bottom"
-              align="right"
-              onClick={handleMintClick}
-              onTap={handleMintClick}
-              onMouseEnter={handleMintTextEnter}
-              onMouseLeave={handleMintTextLeave}
-            />
-            <Circle
-              x={aMintCross.x}
-              y={aMintCross.y}
-              radius={10}
-              fill="black"
-              onClick={closeDialogHandler}
-              onTap={closeDialogHandler}
-            />
-            <Text
-              x={aMintCross.x - 6}
-              y={aMintCross.y - 8}
-              text="X"
-              fontSize={18}
-              fontStyle="bold"
-              fill="white"
-              verticalAlign="top"
-              align="left"
-              opacity={0.7}
-              onClick={closeDialogHandler}
-              onTap={closeDialogHandler}
-            />
-          </Group>
-        )}
-        <Line
-          points={aDiscord.vertice}
-          closed
+        <Rect
+          x={aDiscord.x}
+          y={aDiscord.y}
+          width={aDiscord.width}
+          height={aDiscord.height}
           fill="white"
           opacity={isDiscordHover ? 0.5 : 0}
           onMouseEnter={handleDiscordEnter}
@@ -2486,6 +2350,155 @@ export default function Main() {
           onClick={handleBarClick}
           onTap={handleBarClick}
         />
+        {mintDialog && (
+          <Group>
+            <Rect
+              ref={dialogRef}
+              width={aMintBox.width}
+              height={aMintBox.height}
+              x={aMintBox.x}
+              y={aMintBox.y}
+              cornerRadius={5}
+              fill="black"
+              opacity={0.7}
+            />
+
+            <Image
+              className="bellyTube"
+              width={aTube.width}
+              height={aTube.height}
+              x={aTube.x}
+              y={aTube.y}
+              image={bellyTube}
+            />
+            <Text
+              x={aTube.x + 570 * scale}
+              y={aTube.y + 50 * scale}
+              text="Belly Labs"
+              fontSize={38 * scale}
+              fontStyle="bold"
+              fontFamily="Press Start 2P"
+              fill="#D0DA91"
+              width={aMintBox.width}
+              padding={5}
+              align="left"
+            />
+            <Text
+              x={aMintMinus.x}
+              y={aMintMinus.y}
+              text="-"
+              fontSize={36}
+              fontFamily="Press Start 2P"
+              fill={isMintMinusHover ? "red" : "#D0DA91"}
+              padding={5}
+              verticalAlign="middle"
+              align="right"
+              onClick={decrementMintAmount}
+              onTap={decrementMintAmount}
+              onMouseEnter={handleMintMinusEnter}
+              onMouseLeave={handleMintMinusLeave}
+            />
+            <Text
+              x={aMintQty.x}
+              y={aMintQty.y}
+              text={mintAmount}
+              fontSize={36}
+              fontFamily="Press Start 2P"
+              fill="#D0DA91"
+              padding={5}
+              verticalAlign="middle"
+              align="right"
+            />
+            <Text
+              x={aMintPlus.x - 6}
+              y={aMintPlus.y}
+              text="+"
+              fontSize={36}
+              fontFamily="Press Start 2P"
+              fill={isMintPlusHover ? "red" : "#D0DA91"}
+              padding={5}
+              verticalAlign="middle"
+              align="right"
+              onClick={incrementMintAmount}
+              onTap={incrementMintAmount}
+              onMouseEnter={handleMintPlusEnter}
+              onMouseLeave={handleMintPlusLeave}
+            />
+            <Text
+              x={aMintText.x - 170 * scale}
+              y={aMintText.y + 80 * scale}
+              text="["
+              fontSize={24}
+              fontFamily="Press Start 2P"
+              fill="#D0DA91"
+              padding={5}
+              verticalAlign="middle"
+              align="right"
+            />
+            <Text
+              x={aMintText.x - 140 * scale}
+              y={aMintText.y + 80 * scale}
+              text={mintAmount * CONFIG.DISPLAY_COST}
+              fontSize={24}
+              fontFamily="Press Start 2P"
+              fill="#D0DA91"
+              padding={5}
+              verticalAlign="middle"
+              align="right"
+            />
+            <Text
+              x={aMintText.x - 60 * scale}
+              y={aMintText.y + 80 * scale}
+              text="MATIC]"
+              fontSize={24}
+              fontFamily="Press Start 2P"
+              fill="#D0DA91"
+              padding={5}
+              verticalAlign="middle"
+              align="right"
+            />
+            <Text
+              x={aMintText.x}
+              y={aMintText.y}
+              text="Mint"
+              fontSize={24}
+              fontFamily="Press Start 2P"
+              font
+              fill={isMintTextHover ? "red" : "#D0DA91"}
+              padding={5}
+              verticalAlign="bottom"
+              align="right"
+              onClick={handleMintClick}
+              onTap={handleMintClick}
+              onMouseEnter={handleMintTextEnter}
+              onMouseLeave={handleMintTextLeave}
+            />
+            <Circle
+              x={aMintCross.x - 10}
+              y={aMintCross.y + 10}
+              radius={20}
+              fill="black"
+              onClick={closeDialogHandler}
+              onTap={closeDialogHandler}
+              onMouseEnter={handleMintCrossEnter}
+              onMouseLeave={handleMintCrossLeave}
+            />
+            <Text
+              x={aMintCross.x - 16}
+              y={aMintCross.y + 2}
+              text="X"
+              fontSize={20}
+              fontStyle="bold"
+              fill={isMintCrossHover ? "red" : "white"}
+              opacity={0.7}
+              onClick={closeDialogHandler}
+              onTap={closeDialogHandler}
+              onMouseEnter={handleMintCrossEnter}
+              onMouseLeave={handleMintCrossLeave}
+            />
+          </Group>
+        )}
+
         <Tooltip
           x={state.cursor.x}
           y={state.cursor.y - 15}
